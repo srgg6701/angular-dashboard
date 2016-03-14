@@ -34,6 +34,7 @@ header, .card{
     cursor:move;
 }
 main{
+    clear: both;
     margin: auto;
     max-width: 1160px;
 }
@@ -82,9 +83,6 @@ main > h5{
     width: 273px;
 }
 .remove{
-    display: none;
-}
-.box-panel .remove{
     background-color: black;
     border-radius: 50%;
     display: inherit;
@@ -95,7 +93,7 @@ main > h5{
     transform: rotate(45deg);
     width: 20px;
 }
-.box-panel .remove::after{
+.remove::after{
     content: "+";
     color: white;
     cursor: default;
@@ -106,6 +104,9 @@ main > h5{
     opacity: 0.85;
     text-align: center;
     width: 20px;
+}
+.box-panel-container .remove{
+    display: inherit !important;
 }
 .card{
     margin-bottom: 10px;
@@ -138,7 +139,7 @@ main > h5{
     margin: auto 5px 10px;
 }
 .column{
-    width: 280px;
+    width: 284px;
 }
 .column>[data-task-status]{
     min-height: 88px;
@@ -156,6 +157,12 @@ main > h5{
 .column.over {
     border: 2px dashed #514378;
 }
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
 .issues{
     background-color: lightyellow;
     border: solid 6px rgba(0,0,0,0.5);
@@ -169,6 +176,9 @@ main > h5{
 .moving{
     opacity: 0.75;
 }
+.remove{
+    display: none;
+}
 .row{
     padding:10px 0;
 }
@@ -178,6 +188,76 @@ main > h5{
 }
 #content{
     margin: auto;
+}
+#dashboards-commands{
+    margin-top: 16px;
+}
+#dashboards-commands button{
+    padding: 4px 14px;
+}
+#dashboards-commands h5{
+    margin: 0;
+    margin-bottom: 6px;
+    margin-top: -8px;
+}
+#dashboards-commands select{
+    margin-bottom: 4px;
+    padding: 4px;
+}
+#dashboards-commands textarea,
+#dashboards-commands input[type="text"]{
+    margin-bottom: 5px;
+    padding: 4px 6px;
+    width: 100%;
+}
+#dashboards-commands .choose-color{
+    padding-bottom: 6px;
+    padding-top: 4px;
+}
+#dashboards-commands .choose-color input[type="color"]{
+    margin-top: -2px;
+}
+#dashboards-commands > div{
+    float: left;
+    margin-right: 3px;
+    position: relative;
+}
+#dashboards-commands > div .remove{
+    display: inherit;
+    top: 4px;
+    right: 4px;
+}
+#dashboards-commands div.new-content{
+    background-color: rgb(255, 255, 127);
+    box-shadow: 0 3px 10px 0 rgba(0,0,0,0.8);
+    /*display: none;*/
+    min-height: 120px;
+    padding: 20px;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: 28px;
+    width: 280px;
+    z-index: 1;
+}
+#dashboards-commands p{
+    font-size: 14px;
+    margin: 4px auto;
+}
+#header{
+    margin: 10px auto 14px;
+}
+#header span{
+    color: #F1B7D6;
+    display: block;
+    font-size: 18px;
+}
+#menu{
+    opacity: 0;
+    transition: opacity .3s ease;
+}
+#menu:hover{
+    opacity:1;
 }
 #menu >a{
     background-color: #ddd;

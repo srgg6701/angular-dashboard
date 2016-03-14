@@ -1,2 +1,39 @@
-<h3>Drag me up, baby. And lo♥e me there ☺</h3>
+<div class="float-right" id="dashboards-commands">
+    <div>
+        <button ng-click="newtask=true">Add issue</button>
+        <div class="new-content task" ng-show="newtask">
+            <h5>New task</h5>
+            <select name="select-task-type">
+                <option selected="selected">-select group-</option>
+                <option>Not started</option>
+                <option>In progress</option>
+                <option>Done</option>
+            </select>
+            <p>Add task content</p>
+            <textarea></textarea>
+            <button ng-click="addTask()">Done</button>
+            <div class="remove" ng-click="newtask=false"></div>
+        </div>
+    </div>
+    <div>
+        <button ng-click="newgroup=true">Add issues group</button>
+        <div class="new-content group" ng-show="newgroup">
+            <h5>New group</h5>
+            <input type="text" name="new-group-name" placeholder="Point out the group name">
+            <div class="choose-color">choose group color ► <input type="color"></div>
+            <button ng-click="addGroup()">Looks nice!</button>
+            <div class="remove" ng-click="newgroup=false"></div>
+        </div>
+    </div>
+    <div>
+        <button ng-click="newcategory=true">Add category</button>
+        <div class="new-content category" ng-show="newcategory">
+            <h5>New category</h5>
+            <input type="text" placeholder="Point out the category name">
+            <button ng-click="addPanel()">Got it!</button>
+            <div class="remove" ng-click="newcategory=false"></div>
+        </div>
+    </div>
+</div>
+<h2 class="float-left" id="header">Drag me out, baby! <span>and lo♥e me there ☺</span></h2>
 <main ng-cloak dashboard-template></main>
