@@ -6,8 +6,16 @@ app.directive('dashboardTemplate', function(){
 
         }
     };
-}).directive('draggableElement', function(){
+}).directive('draggableElement', function(Dashboard){
     return function(scope, element){
-
+        //console.log('draggableElement', element[0]);
+        element[0].draggable = true;
+        Dashboard.dragStore.setListeners(element[0]);
+    }
+}).directive('droppableElement', function(Dashboard){
+    return function(scope, element){
+        //console.log('droppableElement', element[0]);
+        element[0].draggable = true;
+        Dashboard.dragStore.setListeners(element[0]);
     }
 });

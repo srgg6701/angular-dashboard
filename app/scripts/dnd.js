@@ -1,125 +1,9 @@
-console.log('dnd works!');
-var debugCnt;
 function showArgs(){
     var args=[];
     for(var i= 0, j=arguments.length; i<j; i++){
         args.push(arguments[i]);
     }
     return args;
-}
-/**/
-window.onload = function () {
-    // Пора открывать лавочку, растоманы! ☺
-    window.dragStore = dragStoreInit(); //console.log('dragStoreInit', window.dragStore);
-    // установить наблюдателей для перемещаемых объектов:
-    // группы карточек по статусам, карточки между группами и панелями
-    // ['dragstart', 'dragenter', 'dragover', 'dragleave'] ■
-    // ['dragover', 'drop', 'dragend']
-    // выбираем все элементы, задействованные в перемещениях
-    window.dragStore.setListeners('.column, .card, .box-panel, .box-panel-container');
-    console.log('%c======================================', 'color: rebeccapurple');
-};
-// тут будут закрома
-function dragStoreInit() {
-    console.groupCollapsed('dragStoreInit', showArgs(arguments));
-    var drawnElement,
-        drawnElementsPanel={},
-        eventsMap = {
-            dragstart:  dragStart,
-            dragover:   dragOver,
-            dragenter:  dragEnter,
-            dragleave:  dragLeave,
-            drop:       drop,
-            dragend:    dragEnd
-        },
-        classes={1:'over', 2:'moving'},
-        currentTarget, currentThis;
-
-    var setupData= {
-        getClass: function(number){
-            return classes[number];
-        },
-        getDrawnElement: function (key) {
-            console.group('dragStore.getDrawnElement', showArgs(arguments));
-            var element = key? drawnElementsPanel[key] : drawnElement;
-                console.log('element: ', element);
-            console.groupEnd();
-            return element;
-        },
-        // вызывается в dragStart
-        setDrawnElement: function (element, key) {
-            console.group('dragStore.setDrawnElement', showArgs(arguments));
-            key ? /** сохранить перетащенный на нижнюю панель элемент
-                    чтобы исключить дублирование (далее будет сверяться)
-                    по id задачи */
-                  drawnElementsPanel[key] = element
-                  /**
-                    сохранить последний перемещённый элемент; также
-                    нужно для проверки -- исключить дублирование элементов
-                    в колонках */
-                : drawnElement = element;
-                //--------------------debug
-                var el=(key)?  drawnElementsPanel[key]:drawnElement;
-                console.log('set element to: ', el);
-                //--------------------debug end
-            console.groupEnd();
-        },
-        //
-        setTransferParams: function(eTarget, eThis){
-            currentTarget=eTarget;
-            currentThis=eThis;
-        },
-        //
-        getTransferParams: function(){
-            return {
-                eTarget:currentTarget,
-                eThis:currentThis
-            }
-        },
-        // удалить из набора перетащенных на нижнюю панель задач текущую
-        removeDrawnElementCopy: function(key){
-            console.groupCollapsed('dragStore.removeDrawnElementCopy', showArgs(arguments));
-            delete drawnElementsPanel[key];
-            console.groupEnd();
-        },
-        setListeners: function (selector, events) {
-            console.groupCollapsed('dragStore.setListeners', showArgs(arguments));
-            var /**
-                контейнер пар [событие: функциия], то, что будет передаваться
-                в качестве параметров при установке наблюдателей */
-                eventsHandler,
-                // элементы, к которым будем присоединять наблюдателей:
-                elements = document.querySelectorAll(selector);
-                console.log('elements: ', elements);
-            /**
-             * Если набор событий не передан, извлекаем их (и функции) все,
-               иначе ─ только переданные с параметром events */
-            if (!events) {
-                eventsHandler = eventsMap;
-            } else { // если передаем, переформируем набор присоединяемых функций
-                eventsHandler = {};
-                console.groupCollapsed('form eventsHandler');
-                events.forEach(function(ev){
-                    eventsHandler[ev] = eventsMap[ev];
-                    console.log('eventsHandler['+ev+']', eventsHandler[ev]);
-                });
-                console.groupEnd();
-            }   console.log('eventsHandler', eventsHandler);
-                console.groupCollapsed('%cset listeners', 'color: violet');
-            for (var i = 0, j = elements.length; i < j; i++) {
-                for (var event in eventsHandler) {
-                    if (eventsHandler.hasOwnProperty(event)) {
-                        console.log({ element: elements[i], event: event, method: eventsHandler[event] });
-                        elements[i].addEventListener(event, eventsHandler[event], false);
-                    }
-                }
-            }
-                console.groupEnd();
-            console.groupEnd();
-        }
-    };  console.log('return %csetupData ', 'color:green',setupData);
-    console.groupEnd();
-    return setupData;
 }
 /**
  * Предотвращает "всплывание" события
@@ -130,7 +14,6 @@ function dragStoreInit() {
  * @param e ─ event
  */
 function dragStart(e) {
-    debugCnt='dragStart';
     if (e.stopPropagation) { // предотвратить дальнейшее распространение
         e.stopPropagation();
     }
@@ -180,7 +63,6 @@ function dragOver(e) {
  * @returns {boolean}
  */
 function drop(e) {
-    debugCnt='drop';
     // e.target ─ элемент, на котором возникло событие drop
     var dropTargetStart = e.target.dataset.dropTarget,
         // элемент-инициатор перемещения; содержит класс "moving"
@@ -405,32 +287,11 @@ function dropCardPanelRelocate(e, drawnElement){
     console.groupEnd();
 }
 /**
- * Переместить карточку на другую панель
- * @param e
- * @param drawnElement
- */
-/*function dropCardBottomPanelRelocate(e, drawnElement){
-    if(debugCnt=='dragOver') console.groupEnd();
-    debugCnt='dropCardRelocate';
-    console.groupCollapsed('%c dropCardBottomPanelRelocate', 'color:white; background-color: #999; padding:4px 10px', showArgs(arguments));
-    console.log('drawnElement: ', drawnElement);
-    // clarify: разобраться
-    if (drawnElement != this) {
-        // если сбрасываем на другую горизонтальную панель
-        if(e.target.dataset.dropTarget&&e.target.dataset.dropTarget=='card-panel'){
-            // добавить элемент в конец панели
-            e.target.appendChild(drawnElement);
-        }
-    }
-    console.groupEnd();
-}*/
-/**
  * копировать Карточку на нижнюю панель
  * @param e
  * @param drawnElement
  */
 function dropCardBottomPanelCopy(e, drawnElement) {
-    debugCnt='dropCardBottomPanelCopy';
     console.groupCollapsed('%c dropCardBottomPanelCopy', 'color:rebeccapurple', showArgs(arguments));
     var taskId = getTaskId(drawnElement),
         drawnElementPanel = dragStore.getDrawnElement(taskId),
@@ -474,7 +335,6 @@ function dropCardBottomPanelCopy(e, drawnElement) {
  * @param  e ─ event
  */
 function dragEnd(e) {
-    if(debugCnt=='dragOver') console.groupEnd();
     console.groupCollapsed('%cdragEnd', 'background-color: #333; color: white; padding:4px 10px',{
         srcElement:arguments[0].srcElement,
         target:arguments[0].target,
@@ -487,7 +347,6 @@ function dragEnd(e) {
     removeElementClass(1);
     removeElementClass(2);
     console.log('%c*******************************************************', 'color: orange');
-    debugCnt=null;
 }
 // - Мини-сервисы -
 /**
@@ -496,9 +355,6 @@ function dragEnd(e) {
  * @returns {string}
  */
 function getTaskId(element){
-    if(debugCnt=='dragOver') console.groupEnd();
-    debugCnt='getTaskId';
-
     console.groupCollapsed('%cgetTaskId', 'color:blue', showArgs(arguments));
     console.log('return: ', element.id.substr(4));
     console.groupEnd();
@@ -553,10 +409,6 @@ function prepareToDrop(e) {
  * @param element
  */
 function removeIssueCopyFromPanel(element){
-    if(debugCnt=='dragOver') console.groupEnd();
-    debugCnt='removeIssueCopyFromPanel';
-
-    // clarify: Не нужно ли (и возможно ли?) добавить наблюдателей в цикле, убрав из тегов? И что с angular-подходом тогда?
     console.groupCollapsed('%cremoveIssueCopyFromPanel', 'color:darkred', showArgs(arguments));
     var card=element.parentNode,
         taskId = getTaskId(card),

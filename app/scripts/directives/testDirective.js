@@ -7,25 +7,20 @@ app.directive('draggableContent', function () {
 
             el.draggable = true;
 
-            el.addEventListener(
-                'dragstart',
-                function (e) {
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('Text', this.id);
-                    this.classList.add('drag');
-                    return false;
-                },
-                false
-            );
+            el.addEventListener('dragstart', dragstart, false);
 
-            el.addEventListener(
-                'dragend',
-                function (e) {
-                    this.classList.remove('drag');
-                    return false;
-                },
-                false
-            );
+            el.addEventListener('dragend', dragend, false);
+
+            function dragstart(e) {
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('Text', this.id);
+                this.classList.add('drag');
+                return false;
+            }
+            function dragend(e){
+                this.classList.remove('drag');
+                return false;
+            }
         };
     })
     .directive('testDropZone', function () {
