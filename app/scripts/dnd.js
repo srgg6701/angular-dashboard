@@ -489,17 +489,13 @@ function prepareToDrop(e) {
  * @param element
  */
 function removeIssueCopyFromPanel(element){
-    console.groupCollapsed('%cremoveIssueCopyFromPanel', 'color:darkred', showArgs(arguments));
     var card=element.parentNode,
         taskId = getTaskId(card),
         drawnElementPanel = dragStore.getDrawnElement(taskId);
-    console.log({ card:card, taskId:taskId, drawnElementPanel:drawnElementPanel });
     /** удалить ранее сохранённый элемент, чтобы не блокировал
     повторное копирование данных */
     if(drawnElementPanel&&drawnElementPanel.innerHTML==card.innerHTML){
         dragStore.removeDrawnElementCopy(taskId);
     }
-    console.log('remove card', { cardParentNode: card.parentNode, card: card});
     card.parentNode.removeChild(card);
-    console.groupEnd();
 }

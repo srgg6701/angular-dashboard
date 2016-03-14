@@ -2,7 +2,7 @@ app.directive('dashboardTemplate', function(){
     return{
         restrict: 'EA',
         templateUrl: 'app/templates/dashboard.html',
-        controller: function(){
+        controller: function($scope){
             window.dragStore=dragStoreInit();
         }
     };
@@ -17,4 +17,25 @@ app.directive('dashboardTemplate', function(){
         return function(scope, element){
             window.dragStore.setListeners(element[0]);
         }
-});
+})
+    .directive('columnRemove', function(){
+        return {
+            scope: {
+                clickgroup: '&', // parent
+                clickpanel: '&' // parent
+            },
+            link: function(scope, element) {
+                //console.log('this', value);
+                element[0].addEventListener('click', function(e) {
+                        if (e.stopPropagation) e.stopPropagation();
+                        scope.$apply('clickgroup()');
+                        return false;
+                    },  false );
+                element[0].addEventListener('click', function(e) {
+                    if (e.stopPropagation) e.stopPropagation();
+                    scope.$apply('clickpanel()');
+                    return false;
+                },  false );
+            }
+        }
+    });

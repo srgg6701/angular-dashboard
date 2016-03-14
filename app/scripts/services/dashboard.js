@@ -1,8 +1,8 @@
 app.service('DashboardData', function () {
     this.contents = {
-        columns: [
-            [   // col
-                'In progress', 'processed',  // 0, 1
+        columns: {
+            processed:[       // status
+                'In progress',  // cards
                 [   // 2
                     ['0', 'Тут некая задача из тех, что назначены, но ещё не начаты'],
                     ['2', 'А это уже задача, находящаяся в работе. Со всякими там описаниями, картинками и т.п.'],
@@ -10,21 +10,22 @@ app.service('DashboardData', function () {
                     ['4', 'Перемещение задачи означает изменение её статуса и это -- стандартная опция её жизненного цикла']
                 ]
             ],
-            [   'Not started', 'new',
+            new:[
+                'Not started',
                 [
                     ['1', 'И тут тоже задача из того же разряда [1]']
                 ]
             ],
-            ['Done',
-                'done',
+            done:[
+                'Done',
                 [
                     ['5', 'И тут тоже задача из того же разряда [2]']
                 ]
             ]
-        ],
-        panels: [
-            ['Urgent !!!',[]],
-            ['Deadline: yesterday forever :(',[]]
-        ]
+        },
+        panels: {
+            urgent: ['Urgent !!!',[]],
+            overdue: ['Deadline: yesterday forever :(',[]]
+        }
     };
 });

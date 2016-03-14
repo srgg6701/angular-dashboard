@@ -15,6 +15,21 @@ header{
     background-color: #444;
     padding: 10px;
 }
+header div{
+    border-radius: 50%;
+    cursor: default;
+    float: right;
+    font-size: 19px;
+    height: 24px;
+    margin-top: -2px;
+    text-align: center;
+    width: 24px;
+}
+header>div:first-child{
+    background-color: red;
+    margin-right: -1px;
+    transform: rotate(45deg);
+}
 header, .card{
     cursor:move;
 }

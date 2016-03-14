@@ -1,15 +1,15 @@
 <div id="box-columns" class="cards-container">
-    <div draggable-element  droppable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="col in dashboard.columns">
-        <header data-drop-target="column">{{col[0]}}</header>
-        <div droppable-element data-task-status="{{col[1]}}">
-            <div draggable-element  droppable-element id="task{{taskArray[0]}}" data-task-status="{{col[1]}}" data-drop-target="card" class="card" ng-repeat="taskArray in col[2]">{{taskArray[1]}}
-                <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel($event)"></div>
+    <div data-card-type="{{status}}" draggable-element  droppable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="(status, data) in dashboard.columns">
+        <header data-drop-target="column">{{data[0]}} <div column-remove clickgroup="removeColumn(status)">+</div></header>
+        <div droppable-element data-task-status="{{status}}">
+            <div draggable-element  droppable-element id="task{{issue[0]}}" data-task-status="{{status}}" data-drop-target="card" class="card" ng-repeat="issue in data[1]">{{issue[1]}}
+                <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
             </div>
         </div>
     </div>
 </div>
-<div draggable-element  droppable-element id="panel-container-{{$index}}" class="box-panel-container" data-drop-area="category-container" ng-repeat="panel in dashboard.panels">
-    <header>{{panel[0]}}</header>
+<div draggable-element  droppable-element id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
+    <header>{{data[0]}} <div column-remove clickpanel="removePanel(status)">+</div></header>
     <section id="box-rows-{{$index}}" droppable-element data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
     </section>
 </div>
