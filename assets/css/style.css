@@ -51,7 +51,13 @@ main > h5{
 }
 .bg-darkmarine{
     background-color:#514378;
-} 
+}
+.bg-pink{
+    background-color: pink;
+}
+.bg-gainsboro{
+    background-color: gainsboro;
+}
 .box-panel{
     margin: 0 !important;
     padding: 10px 5px;
@@ -151,7 +157,13 @@ main > h5{
 .row{
     padding:10px 0;
 }
-/*      */
+/*   id id   */
+#box-columns{
+    margin: auto -5px;
+}
+#content{
+    margin: auto;
+}
 #menu >a{
     background-color: #ddd;
     padding: 10px;

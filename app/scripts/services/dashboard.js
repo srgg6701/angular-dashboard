@@ -1,51 +1,83 @@
-app.service('Dashboard', function(){
-    this.name='Dashboard';
+app.service('DashboardData', function () {
+    this.contents = {
+        columns: [
+            [   'In progress',  // 0
+                'processed',    // 1
+                [               // 2
+                    {'0': 'Тут некая задача из тех, что назначены, но ещё не начаты'},
+                    {'2': 'А это уже задача, находящаяся в работе. Со всякими там описаниями, картинками и т.п.'},
+                    {'3': 'Эти задачи можно перемещать туда-сюда между их родительскими контейнерами'},
+                    {'4': 'Перемещение задачи означает изменение её статуса и это -- стандартная опция её жизненного цикла'}
+                ]
+            ],
+            [   'Not started',
+                'new',
+                [
+                    {'1': 'И тут тоже задача из того же разряда [1]'}
+                ]
+            ],
+            ['Done',
+                'done',
+                [
+                    {'5': 'И тут тоже задача из того же разряда [2]'}
+                ]
+            ]
+        ],
+        panels: [
+            ['Urgent !!!',[]],
+            ['Deadline: yesterday forever :(',[]]
+        ]
+    };
+}).service('Dashboard', function () {
+    this.name = 'Dashboard';
     console.log('dnd works!');
     var debugCnt;
-    function showArgs(){
-        var args=[];
-        for(var i= 0, j=arguments.length; i<j; i++){
+
+    function showArgs() {
+        var args = [];
+        for (var i = 0, j = arguments.length; i < j; i++) {
             args.push(arguments[i]);
         }
         return args;
     }
+
     /**/
     //window.onload = function () {
-        // Пора открывать лавочку, растоманы! ☺
-        //window.dragStore = dragStoreInit();
-        this.dragStore = dragStoreInit(); //console.log('dragStoreInit', window.dragStore);
-        // установить наблюдателей для перемещаемых объектов:
-        // группы карточек по статусам, карточки между группами и панелями
-        // ['dragstart', 'dragenter', 'dragover', 'dragleave'] ■
-        // ['dragover', 'drop', 'dragend']
-        // выбираем все элементы, задействованные в перемещениях
-        //window.dragStore.setListeners('.column, .card, .box-panel, .box-panel-container');
-        this.dragStore.setListeners('.column, .card, .box-panel, .box-panel-container');
-        console.log('%c======================================', 'color: rebeccapurple');
+    // Пора открывать лавочку, растоманы! ☺
+    //window.dragStore = dragStoreInit();
+    this.dragStore = dragStoreInit(); //console.log('dragStoreInit', window.dragStore);
+    // установить наблюдателей для перемещаемых объектов:
+    // группы карточек по статусам, карточки между группами и панелями
+    // ['dragstart', 'dragenter', 'dragover', 'dragleave'] ■
+    // ['dragover', 'drop', 'dragend']
+    // выбираем все элементы, задействованные в перемещениях
+    //window.dragStore.setListeners('.column, .card, .box-panel, .box-panel-container');
+    this.dragStore.setListeners('.column, .card, .box-panel, .box-panel-container');
+    console.log('%c======================================', 'color: rebeccapurple');
     //};
 // тут будут закрома
     function dragStoreInit() {
         console.groupCollapsed('dragStoreInit', showArgs(arguments));
         var drawnElement,
-            drawnElementsPanel={},
+            drawnElementsPanel = {},
             eventsMap = {
-                dragstart:  dragStart,
-                dragover:   dragOver,
-                dragenter:  dragEnter,
-                dragleave:  dragLeave,
-                drop:       drop,
-                dragend:    dragEnd
+                dragstart: dragStart,
+                dragover: dragOver,
+                dragenter: dragEnter,
+                dragleave: dragLeave,
+                drop: drop,
+                dragend: dragEnd
             },
-            classes={1:'over', 2:'moving'},
+            classes = {1: 'over', 2: 'moving'},
             currentTarget, currentThis;
 
-        var setupData= {
-            getClass: function(number){
+        var setupData = {
+            getClass: function (number) {
                 return classes[number];
             },
             getDrawnElement: function (key) {
                 console.group('dragStore.getDrawnElement', showArgs(arguments));
-                var element = key? drawnElementsPanel[key] : drawnElement;
+                var element = key ? drawnElementsPanel[key] : drawnElement;
                 console.log('element: ', element);
                 console.groupEnd();
                 return element;
@@ -63,25 +95,25 @@ app.service('Dashboard', function(){
                  в колонках */
                     : drawnElement = element;
                 //--------------------debug
-                var el=(key)?  drawnElementsPanel[key]:drawnElement;
+                var el = (key) ? drawnElementsPanel[key] : drawnElement;
                 console.log('set element to: ', el);
                 //--------------------debug end
                 console.groupEnd();
             },
             //
-            setTransferParams: function(eTarget, eThis){
-                currentTarget=eTarget;
-                currentThis=eThis;
+            setTransferParams: function (eTarget, eThis) {
+                currentTarget = eTarget;
+                currentThis = eThis;
             },
             //
-            getTransferParams: function(){
+            getTransferParams: function () {
                 return {
-                    eTarget:currentTarget,
-                    eThis:currentThis
+                    eTarget: currentTarget,
+                    eThis: currentThis
                 }
             },
             // удалить из набора перетащенных на нижнюю панель задач текущую
-            removeDrawnElementCopy: function(key){
+            removeDrawnElementCopy: function (key) {
                 console.groupCollapsed('dragStore.removeDrawnElementCopy', showArgs(arguments));
                 delete drawnElementsPanel[key];
                 console.groupEnd();
@@ -103,17 +135,18 @@ app.service('Dashboard', function(){
                 } else { // если передаем, переформируем набор присоединяемых функций
                     eventsHandler = {};
                     console.groupCollapsed('form eventsHandler');
-                    events.forEach(function(ev){
+                    events.forEach(function (ev) {
                         eventsHandler[ev] = eventsMap[ev];
-                        console.log('eventsHandler['+ev+']', eventsHandler[ev]);
+                        console.log('eventsHandler[' + ev + ']', eventsHandler[ev]);
                     });
                     console.groupEnd();
-                }   console.log('eventsHandler', eventsHandler);
+                }
+                console.log('eventsHandler', eventsHandler);
                 console.groupCollapsed('%cset listeners', 'color: violet');
                 for (var i = 0, j = elements.length; i < j; i++) {
                     for (var event in eventsHandler) {
                         if (eventsHandler.hasOwnProperty(event)) {
-                            console.log({ element: elements[i], event: event, method: eventsHandler[event] });
+                            console.log({element: elements[i], event: event, method: eventsHandler[event]});
                             elements[i].addEventListener(event, eventsHandler[event], false);
                         }
                     }
@@ -121,10 +154,12 @@ app.service('Dashboard', function(){
                 console.groupEnd();
                 console.groupEnd();
             }
-        };  console.log('return %csetupData ', 'color:green',setupData);
+        };
+        console.log('return %csetupData ', 'color:green', setupData);
         console.groupEnd();
         return setupData;
     }
+
     /**
      * Предотвращает "всплывание" события
      * Применяет к активному элементу вызвов функции назначения класса "moving"
@@ -134,14 +169,14 @@ app.service('Dashboard', function(){
      * @param e ─ event
      */
     function dragStart(e) {
-        debugCnt='dragStart';
+        debugCnt = 'dragStart';
         if (e.stopPropagation) { // предотвратить дальнейшее распространение
             e.stopPropagation();
         }
-        console.groupCollapsed('%cdragStart', 'background-color:rgb(180,180,255); padding:4px 10px',{
-            '0 e.srcElement':e.srcElement,
-            '1 e.target':e.target,
-            '2 toElement':e.toElement,
+        console.groupCollapsed('%cdragStart', 'background-color:rgb(180,180,255); padding:4px 10px', {
+            '0 e.srcElement': e.srcElement,
+            '1 e.target': e.target,
+            '2 toElement': e.toElement,
             '3 e': e,
             '4 this': this
         }, showArgs(arguments));
@@ -154,9 +189,10 @@ app.service('Dashboard', function(){
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/html', e.target.innerHTML);
 
-        console.log('e.dataTransfer',  e.dataTransfer);
+        console.log('e.dataTransfer', e.dataTransfer);
         console.groupEnd();
     }
+
     /**
      * Применяется к ПАССИВНОМУ элементу, в область над которым
      * входит перетаскиваемый элемент;
@@ -166,6 +202,7 @@ app.service('Dashboard', function(){
     function dragEnter(e) {
         addElementClass(this, 1);
     }
+
     /**
      * Предотвращает вызов события по умолчанию;
      * Назначает "эффект перетаскивания" для элемента
@@ -177,6 +214,7 @@ app.service('Dashboard', function(){
         e.dataTransfer.dropEffect = 'move';
         return false;
     }
+
     /**
      * Шлюз для обработки события drop,
      * внутри ─ разводка по процедурам с карточками
@@ -184,7 +222,7 @@ app.service('Dashboard', function(){
      * @returns {boolean}
      */
     function drop(e) {
-        debugCnt='drop';
+        debugCnt = 'drop';
         // e.target ─ элемент, на котором возникло событие drop
         var dropTargetStart = e.target.dataset.dropTarget,
         // элемент-инициатор перемещения; содержит класс "moving"
@@ -200,10 +238,10 @@ app.service('Dashboard', function(){
         console.group('%cdrop', 'color:orange', {
             '1 drawnElement': drawnElement,
             '2 this': this,
-            '3 drawnElementDropArea':drawnElementDropArea,
+            '3 drawnElementDropArea': drawnElementDropArea,
             '4 dropTargetStart': dropTargetStart,
             '5 drawnElementDropTarget': drawnElement.dataset.dropTarget,
-            '6 dropTargetEndPanel': (this.dataset.dropTarget=='card-panel'),
+            '6 dropTargetEndPanel': (this.dataset.dropTarget == 'card-panel'),
             '7 e': e,
             '8 e.srcElement': e.srcElement,
             '9 e.target': e.target,
@@ -212,42 +250,45 @@ app.service('Dashboard', function(){
         }, showArgs(arguments));
 
         // пытаемся переместить из панели в группу или между панелями
-        if( transferDatasetThis.dropArea &&
-            transferDatasetThis.dropArea=='panel'
-        ){
-            if(dropTargetStart){
-                if( dropTargetStart =='card-panel' &&
-                    transferParams.eThis.id!== e.target.id
-                ){
+        if (transferDatasetThis.dropArea &&
+            transferDatasetThis.dropArea == 'panel'
+        ) {
+            if (dropTargetStart) {
+                if (dropTargetStart == 'card-panel' &&
+                    transferParams.eThis.id !== e.target.id
+                ) {
                     dropCardPanelRelocate.call(this, e, drawnElement);
                 }
             }
-            console.log('%creturn false', 'color:green; font-size:13px');console.groupEnd();
+            console.log('%creturn false', 'color:green; font-size:13px');
+            console.groupEnd();
             return false;
         }
 
-        if( e.target.id && drawnElement.id &&
-            ( e.target.id==drawnElement.id || /**
+        if (e.target.id && drawnElement.id &&
+            ( e.target.id == drawnElement.id || /**
                  Проверяется при перемещении карточки из группы на нижнюю панель.
                  Сработает, если копия карточки сбрасываетя непосредственно на
                  свой предыдущий клон. В противном случае требуется доп. проверка
                  (см. в следующем блоке) */
-                e.target.id==drawnElement.id+'_'
+                e.target.id == drawnElement.id + '_'
             )
         ) {
-            console.log('%creturns false', 'color: red'); console.groupEnd();
+            console.log('%creturns false', 'color: red');
+            console.groupEnd();
             return false;
-        }else {
+        } else {
             console.log('%cblock 2', 'color: darkorange', {
-                '1 this.dataset.dropTarget':this.dataset.dropTarget,
-                '2 this.children':this.children
+                '1 this.dataset.dropTarget': this.dataset.dropTarget,
+                '2 this.children': this.children
             });
             // проверить все элементы в контейнере
-            if( dropTargetEndPanel=this.dataset.dropTarget=='card-panel'){
-                for(var i= 0, j=this.children.length; i<j; i++){
+            if (dropTargetEndPanel = this.dataset.dropTarget == 'card-panel') {
+                for (var i = 0, j = this.children.length; i < j; i++) {
                     // если обнаружен клон, прерываем выполнение функции
-                    if(this.children[i].id==drawnElement.id+'_'){
-                        console.log('%creturns false', 'color: red'); console.groupEnd();
+                    if (this.children[i].id == drawnElement.id + '_') {
+                        console.log('%creturns false', 'color: red');
+                        console.groupEnd();
                         return false;
                     }
                 }
@@ -255,46 +296,51 @@ app.service('Dashboard', function(){
             drawnElementDropTarget = drawnElement.dataset.dropTarget;
         }
         // перемещаем панели
-        if( drawnElementDropArea && thisDropArea &&
-            drawnElementDropArea=='category-container' &&
-            thisDropArea=='category-container'
-        ){
+        if (drawnElementDropArea && thisDropArea &&
+            drawnElementDropArea == 'category-container' &&
+            thisDropArea == 'category-container'
+        ) {
             dropPanelExchange.call(this, e, drawnElement);
-            console.log('%creturns false', 'color: navy'); console.groupEnd();
+            console.log('%creturns false', 'color: navy');
+            console.groupEnd();
             return false;
         }
         // перемещали колонки
-        if(drawnElementDropArea=='column'){
+        if (drawnElementDropArea == 'column') {
             dropColumnExchange.call(this, e, drawnElement);
-            console.log('%creturns false', 'color: red'); console.groupEnd();
+            console.log('%creturns false', 'color: red');
+            console.groupEnd();
             return false;
-        }else{
+        } else {
             // перемещали карточки на нижнюю панель и между панелями
-            if( thisDropArea && thisDropArea=='panel' ||
+            if (thisDropArea && thisDropArea == 'panel' ||
                 ( drawnElementDropTarget &&
-                    drawnElementDropTarget=='card' &&
+                    drawnElementDropTarget == 'card' &&
                     dropTargetStart &&
-                    dropTargetStart =='card-panel'
+                    dropTargetStart == 'card-panel'
                 )
-            ){
+            ) {
                 dropCardBottomPanelCopy.call(this, e, drawnElement);
-                console.log('%creturns false', 'color: navy'); console.groupEnd();
+                console.log('%creturns false', 'color: navy');
+                console.groupEnd();
                 return false;
             }
             dropCardRelocate.call(this, e, drawnElement);
-            console.log('%creturns false', 'color: navy'); console.groupEnd();
+            console.log('%creturns false', 'color: navy');
+            console.groupEnd();
             return false;
         }
         // для подстраховки
         console.groupEnd();
         return false;
     }
+
     /**
      * Поменять местами группу карточек
      * @param e ─ event
      * @param drawnElement ─ target-event
      */
-    function dropColumnExchange(e, drawnElement){
+    function dropColumnExchange(e, drawnElement) {
         console.groupCollapsed('%c dropColumnExchange', 'color:white; background-color: blue; padding:4px 10px', showArgs(arguments));
         console.log({
             '0 e': e,
@@ -304,35 +350,35 @@ app.service('Dashboard', function(){
         // Если собираемся сбрасывать не туда же, откуда пришли
         if (drawnElement != this) {
             var // найти нужную колонку, если влезли глубже, чем надо
-                findColumn = function(toColumn, i){
+                findColumn = function (toColumn, i) {
 
-                    if(toColumn.tagName.toLocaleLowerCase()=='body'){
+                    if (toColumn.tagName.toLocaleLowerCase() == 'body') {
                         console.warn('not found up to "body"');
                         return false;
                     }
 
-                    if(toColumn.dataset.dropArea &&
-                        toColumn.dataset.dropArea=='column'){
+                    if (toColumn.dataset.dropArea &&
+                        toColumn.dataset.dropArea == 'column') {
                         return toColumn;
-                    }else{
-                        if(i>=10){
-                            alert('Группа карточек не найдена после '+i+' итераций');
+                    } else {
+                        if (i >= 10) {
+                            alert('Группа карточек не найдена после ' + i + ' итераций');
                             console.warn('Последняя найденная колонка: ', toColumn);
                             return false;
                         }
-                        i=(!i)? 1:i+1;
+                        i = (!i) ? 1 : i + 1;
                         findColumn(toColumn.parentNode, i);
                     }
                 },
-                toColumn=findColumn(this);
+                toColumn = findColumn(this);
             // не повезло
-            if(!toColumn) {
+            if (!toColumn) {
                 console.groupEnd();
                 return false;
-            }else{
+            } else {
                 console.log({
-                    drawnElement:drawnElement,
-                    toColumn:toColumn
+                    drawnElement: drawnElement,
+                    toColumn: toColumn
                 });
             }
             // контент
@@ -341,12 +387,13 @@ app.service('Dashboard', function(){
         }
         console.groupEnd();
     }
+
     /**
      * Поменять местами панели
      * @param e ─ event
      * @param drawnElement ─ target-event
      */
-    function dropPanelExchange(e, drawnElement){
+    function dropPanelExchange(e, drawnElement) {
         console.groupCollapsed('%c dropPanelExchange', 'color:white; background-color: blue; padding:4px 10px', showArgs(arguments));
         console.log({
             '0 e': e,
@@ -358,11 +405,12 @@ app.service('Dashboard', function(){
             var storedId = drawnElement.id;
             drawnElement.innerHTML = this.innerHTML;
             this.innerHTML = e.dataTransfer.getData('text/html');
-            drawnElement.id=this.id;
-            this.id=storedId;
+            drawnElement.id = this.id;
+            this.id = storedId;
         }
         console.groupEnd();
     }
+
     /**
      * Переместить карточку в другую группу
      * @param e ─ event
@@ -370,37 +418,38 @@ app.service('Dashboard', function(){
      */
     function dropCardRelocate(e, drawnElement) {
         console.group('%c dropCardRelocate', 'font-weight:normal; color:white; background-color: #999; padding:4px 10px', showArgs(arguments),
-            { '1 e.target': e.target, '2 drawnElement':drawnElement }
+            {'1 e.target': e.target, '2 drawnElement': drawnElement}
         );
         // Если собираемся сбрасывать не туда же, откуда пришли
         if (drawnElement != this) {
             // назначим статус текущей группы (не заменять на класс!)
-            if(e.target.dataset.dropTarget){
+            if (e.target.dataset.dropTarget) {
                 console.log('%cdirection: forward', 'background-color:brown');
                 // relocation forward
-                if(e.target.parentNode.dataset.taskStatus){
-                    drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
+                if (e.target.parentNode.dataset.taskStatus) {
+                    drawnElement.dataset.taskStatus = e.target.parentNode.dataset.taskStatus;
                     e.target.parentNode.insertBefore(drawnElement, e.target);
                 }
-            }else{
+            } else {
                 console.log('%cdirection: backward', 'background-color:violet');
                 // relocation backward
-                if(e.target.dataset.taskStatus){
-                    drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
+                if (e.target.dataset.taskStatus) {
+                    drawnElement.dataset.taskStatus = e.target.dataset.taskStatus;
                     e.target.appendChild(drawnElement);
                 }
             }
         }
         console.groupEnd();
     }
+
     /**
      * Переместить карточку между панелями
      * @param e
      * @param drawnElement
      */
-    function dropCardPanelRelocate(e, drawnElement){
+    function dropCardPanelRelocate(e, drawnElement) {
         console.group('%c dropCardPanelRelocate', 'font-weight:normal; color:white; background-color: #999; padding:4px 10px', showArgs(arguments),
-            { '1 e.target': e.target, '2 drawnElement':drawnElement }
+            {'1 e.target': e.target, '2 drawnElement': drawnElement}
         );
         // Если собираемся сбрасывать не туда же, откуда пришли
         if (drawnElement != this) {
@@ -408,61 +457,42 @@ app.service('Dashboard', function(){
         }
         console.groupEnd();
     }
-    /**
-     * Переместить карточку на другую панель
-     * @param e
-     * @param drawnElement
-     */
-    /*function dropCardBottomPanelRelocate(e, drawnElement){
-     if(debugCnt=='dragOver') console.groupEnd();
-     debugCnt='dropCardRelocate';
-     console.groupCollapsed('%c dropCardBottomPanelRelocate', 'color:white; background-color: #999; padding:4px 10px', showArgs(arguments));
-     console.log('drawnElement: ', drawnElement);
-     // clarify: разобраться
-     if (drawnElement != this) {
-     // если сбрасываем на другую горизонтальную панель
-     if(e.target.dataset.dropTarget&&e.target.dataset.dropTarget=='card-panel'){
-     // добавить элемент в конец панели
-     e.target.appendChild(drawnElement);
-     }
-     }
-     console.groupEnd();
-     }*/
+
     /**
      * копировать Карточку на нижнюю панель
      * @param e
      * @param drawnElement
      */
     function dropCardBottomPanelCopy(e, drawnElement) {
-        debugCnt='dropCardBottomPanelCopy';
+        debugCnt = 'dropCardBottomPanelCopy';
         console.groupCollapsed('%c dropCardBottomPanelCopy', 'color:rebeccapurple', showArgs(arguments));
         var taskId = getTaskId(drawnElement),
             drawnElementPanel = dragStore.getDrawnElement(taskId),
-            row= e.target, clone, cloned = document.getElementById('task'+taskId+'_');
+            row = e.target, clone, cloned = document.getElementById('task' + taskId + '_');
 
         // выяснить, нет ли уже такой (в т.ч. на панелях)
-        if(cloned){
-            console.log('%cблокировано дублирование карточки id '+taskId+'_', 'color: red');
+        if (cloned) {
+            console.log('%cблокировано дублирование карточки id ' + taskId + '_', 'color: red');
             console.groupEnd();
             return false;
         }
         /**
          если пытаемся засунуть карточку внутрь другой карточки,
          передвинем всё на уровень выше */
-        if( e.target.dataset.dropTarget &&
-            e.target.dataset.dropTarget=='card') {
+        if (e.target.dataset.dropTarget &&
+            e.target.dataset.dropTarget == 'card') {
             row = row.parentNode;
         }
         /**
          если пытались засунули ещё глубже -- внутрь блока с командой,
          удаляющей карточку, поднимемся выше на 2 уровня   */
-        if( e.target.parentNode.dataset.dropTarget &&
-            e.target.parentNode.dataset.dropTarget=='card'){
+        if (e.target.parentNode.dataset.dropTarget &&
+            e.target.parentNode.dataset.dropTarget == 'card') {
             row = row.parentNode.parentNode;
         }
-        console.log({ drawnElement:drawnElement, taskId:taskId, drawnElementPanel:drawnElementPanel, row:row });
+        console.log({drawnElement: drawnElement, taskId: taskId, drawnElementPanel: drawnElementPanel, row: row});
         clone = drawnElement.cloneNode(true);
-        clone.id=clone.id+'_';
+        clone.id = clone.id + '_';
         console.log('clone: ', clone);
         /** добавить в конец панели; да, можно сделать
          ещё красивше, но совершенству нет предела вообще */
@@ -473,16 +503,17 @@ app.service('Dashboard', function(){
         // удалить с клона класс-эффект
         removeElementClass(2);
     }
+
     /**
      * Применяет к активному элементу функцию удаления класса "moving"
      * @param  e ─ event
      */
     function dragEnd(e) {
-        if(debugCnt=='dragOver') console.groupEnd();
-        console.groupCollapsed('%cdragEnd', 'background-color: #333; color: white; padding:4px 10px',{
-            srcElement:arguments[0].srcElement,
-            target:arguments[0].target,
-            toElement:arguments[0].toElement
+        if (debugCnt == 'dragOver') console.groupEnd();
+        console.groupCollapsed('%cdragEnd', 'background-color: #333; color: white; padding:4px 10px', {
+            srcElement: arguments[0].srcElement,
+            target: arguments[0].target,
+            toElement: arguments[0].toElement
         }, showArgs(arguments));
         if (e.stopPropagation) { // предотвратить дальнейшее распространение
             e.stopPropagation();
@@ -491,50 +522,54 @@ app.service('Dashboard', function(){
         removeElementClass(1);
         removeElementClass(2);
         console.log('%c*******************************************************', 'color: orange');
-        debugCnt=null;
+        debugCnt = null;
     }
+
 // - Мини-сервисы -
     /**
      * Получить id задачи
      * @param element
      * @returns {string}
      */
-    function getTaskId(element){
-        if(debugCnt=='dragOver') console.groupEnd();
-        debugCnt='getTaskId';
+    function getTaskId(element) {
+        if (debugCnt == 'dragOver') console.groupEnd();
+        debugCnt = 'getTaskId';
 
         console.groupCollapsed('%cgetTaskId', 'color:blue', showArgs(arguments));
         console.log('return: ', element.id.substr(4));
         console.groupEnd();
         return element.id.substr(4);
     }
+
     /**
      * Добавить класс
      * @param classNumber
      * @param element
      */
-    function addElementClass(element, classNumber){
+    function addElementClass(element, classNumber) {
         element.classList.add(dragStore.getClass(classNumber));
     }
+
     /**
      * Удалить класс (с задержкой, чтобы юзер видел процесс)
      * @param classNumber
      */
-    function removeElementClass(classNumber){
-        var cnt= 0,
+    function removeElementClass(classNumber) {
+        var cnt = 0,
             className = dragStore.getClass(classNumber),
             el,
-            intrvl = setInterval(function(){
-                if(el=document.getElementsByClassName(className)[0]){
+            intrvl = setInterval(function () {
+                if (el = document.getElementsByClassName(className)[0]) {
                     el.classList.remove(className);
                     clearInterval(intrvl);
                 }
                 cnt++;
-                if(cnt>50){
+                if (cnt > 50) {
                     clearInterval(intrvl);
                 }
-            },100);
+            }, 100);
     }
+
     /**
      * Применяет к пассивному элементу функцию удаления класса "over"
      * @param e ─ event
@@ -542,6 +577,7 @@ app.service('Dashboard', function(){
     function dragLeave(e) {
         removeElementClass(1); // moving
     }
+
     /**
      * Выполнить стандартные действия перед "сбрасыванием" элемента
      * @param e
@@ -552,26 +588,27 @@ app.service('Dashboard', function(){
         // получить последний сохранённый элемент
         return drawnElement;
     }
+
     /**
      * Удалить копию задачи с нижней панели
      * @param element
      */
-    function removeIssueCopyFromPanel(element){
-        if(debugCnt=='dragOver') console.groupEnd();
-        debugCnt='removeIssueCopyFromPanel';
+    function removeIssueCopyFromPanel(element) {
+        if (debugCnt == 'dragOver') console.groupEnd();
+        debugCnt = 'removeIssueCopyFromPanel';
 
         // clarify: Не нужно ли (и возможно ли?) добавить наблюдателей в цикле, убрав из тегов? И что с angular-подходом тогда?
         console.groupCollapsed('%cremoveIssueCopyFromPanel', 'color:darkred', showArgs(arguments));
-        var card=element.parentNode,
+        var card = element.parentNode,
             taskId = getTaskId(card),
             drawnElementPanel = dragStore.getDrawnElement(taskId);
-        console.log({ card:card, taskId:taskId, drawnElementPanel:drawnElementPanel });
+        console.log({card: card, taskId: taskId, drawnElementPanel: drawnElementPanel});
         /** удалить ранее сохранённый элемент, чтобы не блокировал
          повторное копирование данных */
-        if(drawnElementPanel&&drawnElementPanel.innerHTML==card.innerHTML){
+        if (drawnElementPanel && drawnElementPanel.innerHTML == card.innerHTML) {
             dragStore.removeDrawnElementCopy(taskId);
         }
-        console.log('remove card', { cardParentNode: card.parentNode, card: card});
+        console.log('remove card', {cardParentNode: card.parentNode, card: card});
         card.parentNode.removeChild(card);
         console.groupEnd();
     }
