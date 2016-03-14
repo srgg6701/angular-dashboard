@@ -2,20 +2,19 @@ app.directive('dashboardTemplate', function(){
     return{
         restrict: 'EA',
         templateUrl: 'app/templates/dashboard.html',
-        link:function(scope, element, attr){
-
+        controller: function(){
+            window.dragStore=dragStoreInit();
         }
     };
-}).directive('draggableElement', function(Dashboard){
-    return function(scope, element){
-        //console.log('draggableElement', element[0]);
-        element[0].draggable = true;
-        Dashboard.dragStore.setListeners(element[0]);
-    }
-}).directive('droppableElement', function(Dashboard){
-    return function(scope, element){
-        //console.log('droppableElement', element[0]);
-        element[0].draggable = true;
-        Dashboard.dragStore.setListeners(element[0]);
-    }
+}). // вызывать установщика наблюдателей для перемещаемых элементов
+    directive('draggableElement', function(){
+        return function(scope, element){
+            element[0].draggable = true;
+            window.dragStore.setListeners(element[0]);
+        }
+})  // вызывать установщика наблюдателей для принимающих элементов
+    .directive('droppableElement', function(){
+        return function(scope, element){
+            window.dragStore.setListeners(element[0]);
+        }
 });

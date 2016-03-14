@@ -1,14 +1,14 @@
 <div id="box-columns" class="cards-container">
-    <div draggable-element  draggable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="col in dashboard.columns">
+    <div draggable-element  droppable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="col in dashboard.columns">
         <header data-drop-target="column">{{col[0]}}</header>
-        <div droppable-element data-task-status="{{col[1]}}" ng-repeat="issues in col[2]">
-            <div draggable-element  draggable-element ng-repeat="(taskId, taskText) in issues" id="task{{taskId}}" data-task-status="{{col[1]}}" data-drop-target="card" class="card">{{taskText}}
+        <div droppable-element data-task-status="{{col[1]}}">
+            <div draggable-element  droppable-element id="task{{taskArray[0]}}" data-task-status="{{col[1]}}" data-drop-target="card" class="card" ng-repeat="taskArray in col[2]">{{taskArray[1]}}
                 <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel($event)"></div>
             </div>
         </div>
     </div>
 </div>
-<div draggable-element  draggable-element id="panel-container-{{$index}}" class="box-panel-container" data-drop-area="category-container" ng-repeat="panel in dashboard.panels">
+<div draggable-element  droppable-element id="panel-container-{{$index}}" class="box-panel-container" data-drop-area="category-container" ng-repeat="panel in dashboard.panels">
     <header>{{panel[0]}}</header>
     <section id="box-rows-{{$index}}" droppable-element data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
     </section>

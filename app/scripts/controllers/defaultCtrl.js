@@ -1,4 +1,4 @@
 // strict mode coming later
-app.controller('defaultCtrl', function ($scope, Dashboard, DashboardData) {
+app.controller('defaultCtrl', function ($scope, DashboardData) {
     $scope.dashboard = DashboardData.contents;
 });
