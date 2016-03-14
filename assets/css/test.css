@@ -16,7 +16,9 @@ main{
 .float-left {
     float: left;
 }
-
+.float-right{
+    float:right;
+}
 [class*="bg"] {
     margin-bottom: 10px;
     margin-right: 10px;
