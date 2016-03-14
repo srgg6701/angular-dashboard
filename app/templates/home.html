@@ -1,0 +1,54 @@
+<main ng-cloak>
+    <h3>Drag me up, baby. And lo♥e me there ☺</h3>
+    <div id="box-columns" class="cards-container">
+        <div draggable="true" data-drop-area="column" data-drop-target="card" class="column">
+            <header data-drop-target="column">In progress</header>
+            <div data-task-status="processed">
+                <div id="task0" data-task-status="processed" data-drop-target="card" draggable="true" class="card">
+                    Тут некая задача из тех, что назначены, но ещё не начаты
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+                <div id="task2" data-task-status="processed" data-drop-target="card" draggable="true" class="card">
+                    А это уже задача, находящаяся в работе. Со всякими там описаниями, картинками и т.п.
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+                <div id="task3" data-task-status="processed" data-drop-target="card" draggable="true" class="card">
+                    Эти задачи можно перемещать туда-сюда между их родительскими контейнерами
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+                <div id="task4" data-task-status="processed" data-drop-target="card" draggable="true" class="card">
+                    Перемещение задачи означает изменение её статуса и это -- стандартная опция её жизненного цикла
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+            </div>
+        </div>
+        <div draggable="true" data-drop-area="column" data-drop-target="card" class="column">
+            <header data-drop-target="column">Not started</header>
+            <div data-task-status="new">
+                <div id="task1" data-task-status="new" data-drop-target="card" draggable="true" class="card">
+                    И тут тоже задача из того же разряда [1]
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+            </div>
+        </div>
+        <div draggable="true" data-drop-area="column" data-drop-target="card" class="column">
+            <header data-drop-target="column">Done</header>
+            <div data-task-status="done">
+                <div id="task5" data-task-status="done" data-drop-target="card" draggable="true" class="card">
+                    И тут тоже задача из того же разряда [2]
+                    <div class="remove" data-action="remove-card-copy" onclick="removeIssueCopyFromPanel(this)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="panel-container-1" draggable="true" class="box-panel-container" data-drop-area="category-container">
+        <header>Catgory 1</header>
+        <section id="box-rows-1" data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
+        </section>
+    </div>
+    <div id="panel-container-2" draggable="true" class="box-panel-container" data-drop-area="category-container">
+        <header>Catgory 2</header>
+        <section id="box-rows-2" data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
+        </section>
+    </div>
+</main>

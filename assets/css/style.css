@@ -1,0 +1,158 @@
+*{
+    box-sizing: border-box;
+    font-family: Tahoma, serif;
+}
+body{
+    display: flex;
+    flex-direction: row;
+}
+h1, h2, h3, h4, h5, header{
+    font-family: Verdana, serif;
+}
+header{
+    color: whitesmoke;
+    font-weight: bold;
+    background-color: #444;
+    padding: 10px;
+}
+header, .card{
+    cursor:move;
+}
+main{
+    margin: auto;
+    max-width: 1160px;
+}
+main > h1,
+main > h2,
+main > h3,
+main > h4,
+main > h5{
+    padding: 0 5px;
+}
+/*  --------------------    */
+.absolute{
+    position: absolute;
+}
+.absolute{
+    right: 0;
+}
+[data-drop-area="category-container"]{
+    margin-top: 10px;
+}
+[draggable] {
+    position: relative;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.bg-darkazure{
+    background-color: rgba(0,175,200,1);
+}
+.bg-darkmarine{
+    background-color:#514378;
+} 
+.box-panel{
+    margin: 0 !important;
+    padding: 10px 5px;
+}
+.box-panel .card{
+    padding-right: 28px;
+    width: 273px;
+}
+.remove{
+    display: none;
+}
+.box-panel .remove{
+    background-color: black;
+    border-radius: 50%;
+    display: inherit;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: rotate(45deg);
+    width: 20px;
+}
+.box-panel .remove::after{
+    content: "+";
+    color: white;
+    cursor: default;
+    display: inline-block;
+    font-weight: bold;
+    height: 20px;
+    line-height: 0;
+    opacity: 0.85;
+    text-align: center;
+    width: 20px;
+}
+.card{
+    margin-bottom: 10px;
+    padding: 10px;
+}
+.cards-box{
+    min-height: 68px;
+}
+.card[data-task-status="new"]{
+    background-color: #B0FF00;
+    color: black;
+}
+.card[data-task-status="processed"]{
+    background-color: #38B2AE;
+    color:white;
+}
+.card[data-task-status="done"]{
+    background-color: #F3FF00;
+    color: black;
+}
+.cards-container, .row, .column{
+    min-height: 127px;
+}
+.cards-container{
+    overflow:auto;
+}
+.column,
+.box-panel .card{
+    float: left;
+    margin: auto 5px 10px;
+}
+.column{
+    width: 280px;
+}
+.column>[data-task-status]{
+    min-height: 88px;
+    padding:10px;
+}
+.column>[data-task-status="new"]{
+    background-color: #D063CA;
+}
+.column>[data-task-status="processed"]{
+    background-color: #FFB500;
+}
+.column>[data-task-status="done"]{
+    background-color: #00FAFF;
+}
+.column.over {
+    border: 2px dashed #514378;
+}
+.issues{
+    background-color: lightyellow;
+    border: solid 6px rgba(0,0,0,0.5);
+    max-width: 240px;
+    padding: 10px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+}
+.moving{
+    opacity: 0.75;
+}
+.row{
+    padding:10px 0;
+}
+/*      */
+#menu >a{
+    background-color: #ddd;
+    padding: 10px;
+}
