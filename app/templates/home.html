@@ -1,37 +1,42 @@
 <div class="float-right" id="dashboards-commands">
     <div>
-        <button ng-click="newtask=true">Add issue</button>
-        <div class="new-content task" ng-show="newtask">
-            <h5>New task</h5>
-            <select name="select-task-type">
-                <option selected="selected">-select group-</option>
-                <option>Not started</option>
-                <option>In progress</option>
-                <option>Done</option>
-            </select>
-            <p>Add task content</p>
-            <textarea></textarea>
-            <button ng-click="addTask()">Done</button>
-            <div class="remove" ng-click="newtask=false"></div>
+        <button ng-click="newtask.show=true">Add issue</button>
+        <div class="new-content task" ng-show="newtask.show">
+            <form name="form-new-task" ng-submit="addTask()">
+                <h5>New task</h5>
+                <select name="select-task-type" required="required" ng-model="newtask.select">
+                    <option selected="selected" value="">-select group-</option>
+                    <option value="not-started">Not started</option>
+                    <option value="in-progress">In progress</option>
+                    <option value="done">Done</option>
+                </select>
+                <textarea required="required" placeholder="Add task content" ng-model="newtask.text"></textarea>
+                <button type="submit">Done</button>
+            </form>
+            <div class="remove" ng-click="newtask.show=false"></div>
         </div>
     </div>
     <div>
-        <button ng-click="newgroup=true">Add issues group</button>
-        <div class="new-content group" ng-show="newgroup">
-            <h5>New group</h5>
-            <input type="text" name="new-group-name" placeholder="Point out the group name">
-            <div class="choose-color">choose group color ► <input type="color"></div>
-            <button ng-click="addGroup()">Looks nice!</button>
-            <div class="remove" ng-click="newgroup=false"></div>
+        <button ng-click="newgroup.show=true">Add issues group</button>
+        <div class="new-content group" ng-show="newgroup.show">
+            <form name="form-new-group" ng-submit="addGroup()">
+                <h5>New group</h5>
+                <input type="text" name="new-group-name" placeholder="Point out the group name" required="required" ng-model="newgroup.name">
+                <div class="choose-color">choose group color ► <input type="color" ng-model="newgroup.color"></div>
+                <button type="submit">Looks nice!</button>
+            </form>
+            <div class="remove" ng-click="newgroup.show=false"></div>
         </div>
     </div>
     <div>
-        <button ng-click="newcategory=true">Add category</button>
-        <div class="new-content category" ng-show="newcategory">
-            <h5>New category</h5>
-            <input type="text" placeholder="Point out the category name">
-            <button ng-click="addPanel()">Got it!</button>
-            <div class="remove" ng-click="newcategory=false"></div>
+        <button ng-click="newcategory.show=true">Add category</button>
+        <div class="new-content category" ng-show="newcategory.show">
+            <form name="form-new-category" ng-submit="addPanel()">
+                <h5>New category</h5>
+                <input type="text" placeholder="Point out the category name" ng-model="newcategory.name">
+                <button type="submit">Got it!</button>
+            </form>
+            <div class="remove" ng-click="newcategory.show=false"></div>
         </div>
     </div>
 </div>

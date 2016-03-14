@@ -7,13 +7,13 @@ app.service('UserInterface', function(){
         delete scope['dashboard'].panels[status];
         //console.log('removePanel', status, $scope.dashboard.panels);
     };
-    this.addTask = function(){
-        console.log('add task');
+    this.addTask = function(form){
+        console.log('add task', form);
     };
-    this.addGroup = function(){
-        console.log('add group');
+    this.addGroup = function(form){
+        console.log('add group', form);
     };
-    this.addPanel = function(){
-        console.log('add panel');
+    this.addPanel = function(form){
+        console.log('add panel', form);
     };
 });

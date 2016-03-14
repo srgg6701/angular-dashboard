@@ -1,6 +1,9 @@
 // strict mode coming later
 app.controller('defaultCtrl', function ($scope, DashboardData, UserInterface) {
     $scope.dashboard = DashboardData.contents;
+    $scope.newtask={};
+    $scope.newgroup={};
+    $scope.newcategory={};
     $scope.removeColumn = function(status){
         UserInterface.removeColumn($scope, status);
     };
@@ -8,12 +11,15 @@ app.controller('defaultCtrl', function ($scope, DashboardData, UserInterface) {
         UserInterface.removePanel($scope, status);
     };
     $scope.addTask = function(){
-        UserInterface.addTask();
+        UserInterface.addTask($scope.newtask);
+        $scope.newtask.show=false;
     };
     $scope.addGroup = function(){
-        UserInterface.addGroup();
+        UserInterface.addGroup($scope.newgroup);
+        $scope.newgroup.show=false;
     };
     $scope.addPanel = function(){
-        UserInterface.addPanel();
+        UserInterface.addPanel($scope.newcategory);
+        $scope.newcategory.show=false;
     };
 });
