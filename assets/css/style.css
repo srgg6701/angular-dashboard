@@ -230,13 +230,12 @@ main > h5{
 #dashboards-commands div.new-content{
     background-color: rgb(255, 255, 127);
     box-shadow: 0 3px 10px 0 rgba(0,0,0,0.8);
-    /*display: none;*/
     min-height: 120px;
     padding: 20px;
     position: absolute;
     right: 0;
     text-align: left;
-    top: 28px;
+    top: 30px;
     width: 280px;
     z-index: 1;
 }

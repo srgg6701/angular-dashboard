@@ -15,8 +15,7 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
         DashboardActions.removePanel($scope, status);
     };
     $scope.addTask = function(){
-        DashboardActions.addTask($scope.newtask);
-        $scope.newtask.show=false;
+        DashboardActions.addTask($scope);
     };
     $scope.addGroup = function(){
         DashboardActions.addGroup($scope.newgroup);

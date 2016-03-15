@@ -4,12 +4,6 @@
         <div class="new-content task" ng-show="newtask.show">
             <form name="form-new-task" ng-submit="addTask()">
                 <h5>New task</h5>
-                <select name="select-task-type" required="required" ng-model="newtask.select">
-                    <option selected="selected" value="">-select group-</option>
-                    <option value="new">Not started</option>
-                    <option value="processed">In progress</option>
-                    <option value="done">Done</option>
-                </select>
                 <textarea required="required" placeholder="Add task content" ng-model="newtask.text"></textarea>
                 <button type="submit">Done</button>
             </form>
