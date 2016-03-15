@@ -18,24 +18,25 @@ app.directive('dashboardTemplate', function(){
             window.dragStore.setListeners(element[0]);
         }
 })
-    .directive('columnRemove', function(){
+    .directive('cardsRemove', function(){
+        function addListener(fn, scope){
+          this.addEventListener('click', function(e) {
+              if (e.stopPropagation) e.stopPropagation();
+              scope.$apply('click'+fn+'remove()');
+              return false;
+          },  false )
+        }
         return {
             scope: {
-                clickgroup: '&', // parent
-                clickpanel: '&' // parent
+                clickgroupremove: '&',
+                clickpanelremove: '&',
+                clickcardremove: '&'
             },
             link: function(scope, element) {
-                //console.log('this', value);
-                element[0].addEventListener('click', function(e) {
-                        if (e.stopPropagation) e.stopPropagation();
-                        scope.$apply('clickgroup()');
-                        return false;
-                    },  false );
-                element[0].addEventListener('click', function(e) {
-                    if (e.stopPropagation) e.stopPropagation();
-                    scope.$apply('clickpanel()');
-                    return false;
-                },  false );
+                ['card', 'group', 'panel'].forEach(function(target){
+                    if(element[0].getAttribute('click'+target+'remove'))
+                        addListener.call(element[0],target, scope);
+                });
             }
         }
     });

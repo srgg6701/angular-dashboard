@@ -105,12 +105,15 @@ main > h5{
     text-align: center;
     width: 20px;
 }
-.box-panel-container .remove{
+.card .remove{
     display: inherit !important;
+    right: 3px;
+    top: 3px;
 }
 .card{
     margin-bottom: 10px;
     padding: 10px;
+    padding-right: 26px;
 }
 .cards-box{
     min-height: 68px;

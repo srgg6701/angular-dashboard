@@ -488,14 +488,15 @@ function prepareToDrop(e) {
  * Удалить копию задачи с нижней панели
  * @param element
  */
+/*
 function removeIssueCopyFromPanel(element){
     var card=element.parentNode,
         taskId = getTaskId(card),
         drawnElementPanel = dragStore.getDrawnElement(taskId);
-    /** удалить ранее сохранённый элемент, чтобы не блокировал
-    повторное копирование данных */
+    /!** удалить ранее сохранённый элемент, чтобы не блокировал
+    повторное копирование данных *!/
     if(drawnElementPanel&&drawnElementPanel.innerHTML==card.innerHTML){
         dragStore.removeDrawnElementCopy(taskId);
     }
     card.parentNode.removeChild(card);
-}
+}*/
