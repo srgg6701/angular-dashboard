@@ -14,8 +14,8 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
     $scope.removePanel = function(status){
         DashboardActions.removePanel($scope, status);
     };
-    $scope.removeCard = function(cardId){
-        DashboardActions.removeCard($scope, cardId);
+    $scope.removeCard = function(cardId, status, index){
+        DashboardActions.removeCard($scope, cardId, status, index);
     };
     $scope.addTask = function(){
         DashboardActions.addTask($scope);
