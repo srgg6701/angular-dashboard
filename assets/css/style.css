@@ -33,6 +33,9 @@ header>div:first-child{
 header, .card{
     cursor:move;
 }
+form h6{
+    margin: 6px 0;
+}
 main{
     clear: both;
     margin: auto;

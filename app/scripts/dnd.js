@@ -339,6 +339,8 @@ function dropCardRelocate(e, drawnElement) {
             if(e.target.parentNode.dataset.taskStatus){
                 drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
                 e.target.parentNode.insertBefore(drawnElement, e.target);
+                // sync group alias between card and its container
+                drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
             }
         }else{
             console.log('%cdirection: backward', 'background-color:violet');
@@ -346,8 +348,18 @@ function dropCardRelocate(e, drawnElement) {
             if(e.target.dataset.taskStatus){
                 drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
                 e.target.appendChild(drawnElement);
+                // sync group alias between card and its container
+                drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
             }
         }
+        var scope = angular.element(drawnElement).scope(),
+            parentScope = angular.element(drawnElement).scope();
+        /*scope.$apply(function(){
+            alert('Got it!');
+            console.log('%celement', 'font-size:20px', this);
+            //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
+        });*/
+        scope.relocateCard(scope);
     }
     console.groupEnd();
 }
@@ -484,19 +496,13 @@ function prepareToDrop(e) {
     // получить последний сохранённый элемент
     return drawnElement;
 }
-/**
- * Удалить копию задачи с нижней панели
- * @param element
- */
-/*
-function removeIssueCopyFromPanel(element){
-    var card=element.parentNode,
-        taskId = getTaskId(card),
-        drawnElementPanel = dragStore.getDrawnElement(taskId);
-    /!** удалить ранее сохранённый элемент, чтобы не блокировал
-    повторное копирование данных *!/
-    if(drawnElementPanel&&drawnElementPanel.innerHTML==card.innerHTML){
-        dragStore.removeDrawnElementCopy(taskId);
-    }
-    card.parentNode.removeChild(card);
-}*/
+
+function passElement(el){
+    var scope = angular.element(el).scope();
+    scope.$apply(function(){
+        alert('Got it!');
+        console.log('%celement', 'font-size:20px', this);
+        //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
+    });
+    scope.relocateCard(scope);
+}

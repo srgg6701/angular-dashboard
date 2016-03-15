@@ -8,6 +8,11 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
     $scope.newgroup={};
     $scope.newcategory={};
 
+    $scope.relocateCard = function(scope){ //card
+        //alert('relocate!');
+        console.log('%ccard', 'font-size:20px', scope);
+    };
+
     $scope.removeColumn = function(status){
         DashboardActions.removeColumn($scope, status);
     };
@@ -15,17 +20,16 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
         DashboardActions.removePanel($scope, status);
     };
     $scope.removeCard = function(cardId, status, index){
+        console.log('args', arguments[2], $scope);
         DashboardActions.removeCard($scope, cardId, status, index);
     };
     $scope.addTask = function(){
         DashboardActions.addTask($scope);
     };
     $scope.addGroup = function(){
-        DashboardActions.addGroup($scope.newgroup);
-        $scope.newgroup.show=false;
+        DashboardActions.addGroup($scope);
     };
     $scope.addPanel = function(){
-        DashboardActions.addPanel($scope.newcategory);
-        $scope.newcategory.show=false;
+        DashboardActions.addPanel($scope);
     };
 });

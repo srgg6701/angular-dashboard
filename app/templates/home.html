@@ -15,6 +15,9 @@
         <div class="new-content group" ng-show="newgroup.show">
             <form name="form-new-group" ng-submit="addGroup()">
                 <h5>New group</h5>
+                <h6>Group class name</h6>
+                <input type="text" name="new-group-class" placeholder="3-10 symbols, letters, hyphens and underscores are only allowed" required="required" pattern="^[a-z\-_]{3,16}$" ng-model="newgroup.class">
+                <h6>Group name</h6>
                 <input type="text" name="new-group-name" placeholder="Point out the group name" required="required" ng-model="newgroup.name">
                 <div class="choose-color">choose group color ► <input type="color" ng-model="newgroup.color"></div>
                 <button type="submit">Looks nice!</button>
