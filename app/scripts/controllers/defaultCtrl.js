@@ -1,25 +1,29 @@
 // strict mode coming later
-app.controller('defaultCtrl', function ($scope, DashboardData, UserInterface) {
-    $scope.dashboard = DashboardData.contents;
+app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActions) {
+    DashboardContents.getDashboardContents().then(function(data){
+        $scope.dashboard = data; //console.log(data);
+    });
+
     $scope.newtask={};
     $scope.newgroup={};
     $scope.newcategory={};
+
     $scope.removeColumn = function(status){
-        UserInterface.removeColumn($scope, status);
+        DashboardActions.removeColumn($scope, status);
     };
     $scope.removePanel = function(status){
-        UserInterface.removePanel($scope, status);
+        DashboardActions.removePanel($scope, status);
     };
     $scope.addTask = function(){
-        UserInterface.addTask($scope.newtask);
+        DashboardActions.addTask($scope.newtask);
         $scope.newtask.show=false;
     };
     $scope.addGroup = function(){
-        UserInterface.addGroup($scope.newgroup);
+        DashboardActions.addGroup($scope.newgroup);
         $scope.newgroup.show=false;
     };
     $scope.addPanel = function(){
-        UserInterface.addPanel($scope.newcategory);
+        DashboardActions.addPanel($scope.newcategory);
         $scope.newcategory.show=false;
     };
 });

@@ -1,4 +1,5 @@
-app.service('UserInterface', function(){
+app.service('DashboardActions', function(DashboardContents){
+
     this.removeColumn = function(scope, status){
         delete scope['dashboard'].columns[status];
         //console.log('removeColumn', status, $scope.dashboard.columns);
@@ -8,7 +9,8 @@ app.service('UserInterface', function(){
         //console.log('removePanel', status, $scope.dashboard.panels);
     };
     this.addTask = function(form){
-        console.log('add task', form);
+        var contents = DashboardContents.contents;
+        console.log('add task', form, contents);
     };
     this.addGroup = function(form){
         console.log('add group', form);

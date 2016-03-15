@@ -1,31 +1,15 @@
-app.service('DashboardData', function () {
-    this.contents = {
-        columns: {
-            processed:[       // status
-                'In progress',  // cards
-                [   // 2
-                    ['0', 'Тут некая задача из тех, что назначены, но ещё не начаты'],
-                    ['2', 'А это уже задача, находящаяся в работе. Со всякими там описаниями, картинками и т.п.'],
-                    ['3', 'Эти задачи можно перемещать туда-сюда между их родительскими контейнерами'],
-                    ['4', 'Перемещение задачи означает изменение её статуса и это -- стандартная опция её жизненного цикла']
-                ]
-            ],
-            new:[
-                'Not started',
-                [
-                    ['1', 'И тут тоже задача из того же разряда [1]']
-                ]
-            ],
-            done:[
-                'Done',
-                [
-                    ['5', 'И тут тоже задача из того же разряда [2]']
-                ]
-            ]
-        },
-        panels: {
-            urgent: ['Urgent !!!',[]],
-            overdue: ['Deadline: yesterday forever :(',[]]
-        }
+app.service('DashboardContents', function ($http, $q) {
+
+    this.getDashboardContents = function() {
+        var defer = $q.defer();
+
+        $http.get('app/data/dashboard.json')
+            .then(function(response) {
+                defer.resolve(response.data);
+        }, function(response) {
+            defer.reject(response);
+        });
+
+        return defer.promise;
     };
 });
