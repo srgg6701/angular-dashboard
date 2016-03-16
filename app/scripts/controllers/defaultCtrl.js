@@ -55,8 +55,27 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
         console.log('scope', $scope);
     };
 
-    $scope.removeClone = function(){
+    $scope.removeClone = function(panel, cardId, sectionId){
         console.log('removeClone', arguments);
+        var clonesArray=$scope.dashboard.panels[panel.status][1],
+            cardNativeId = cardId.substring(4, cardId.indexOf("_")),
+            cloneIndex=clonesArray.indexOf(cardNativeId);
+        console.log({
+            panels: $scope.dashboard.panels,
+            status: panel.status,
+            panelData: $scope.dashboard.panels[panel.status],
+            dataArray: $scope.dashboard.panels[panel.status][1],
+            scopeSegment: clonesArray
+        });
+
+        var removed=$scope.dashboard.panels[panel.status][1].splice(cloneIndex,1);
+
+        // console.log('panelData', {panelData:$scope.dashboard.panels[panel.status], removed:removed});
+        // 1: "task4_0_"
+        // 2: "box-rows-0"
+
+
+        $scope.$apply();
     };
 
     $scope.removeColumn = function(status){

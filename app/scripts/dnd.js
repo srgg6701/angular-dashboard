@@ -532,16 +532,16 @@ function proLog() {
 }
 function hideCard(deleter){
     var card=deleter.parentNode,
-        cardScope = angular.element(card).scope(),
+        cardScope,
         cardIdNative;
     // task4
     if(card.id[card.id.length-1]!='_'){
         try{
+            cardScope = angular.element(card).scope()
             cardIdNative=card.id.substr(4);
             console.log({cardId:card.id, cartdIdNative: cardIdNative});
             var tasks = document.querySelectorAll('[id^="task'+cardIdNative+'_"]');
             cardScope.imposeCard(cardScope);
-
             console.log({
                 'tasks':tasks,
                 selector: '[id|="task'+cardIdNative+'_"]'
@@ -554,7 +554,8 @@ function hideCard(deleter){
             console.error(e.message);
         }
     }else{
-        cardScope.removeClone([cardScope, card.parentNode.id]);
+        var scope = angular.element(card.parentNode).scope();
+        scope.removeClone(scope, card.id, card.parentNode.id);
         card.style.display='none';
     }
 }
