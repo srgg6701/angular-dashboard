@@ -124,14 +124,21 @@ div[style] .card{
 .cards-box{
     min-height: 68px;
 }
+
+.box-panel .card[data-task-status]{
+    background-color: whitesmoke;
+}
+.box-panel .card[data-task-status="new"],
 .card[data-task-status="new"]{
     background-color: #B0FF00;
     color: black;
 }
+.box-panel .card[data-task-status="processed"],
 .card[data-task-status="processed"]{
     background-color: #38B2AE;
     color:white;
 }
+.box-panel .card[data-task-status="done"],
 .card[data-task-status="done"]{
     background-color: #F3FF00;
     color: black;

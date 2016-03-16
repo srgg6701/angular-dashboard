@@ -37,7 +37,6 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
         newScopeCardBox.push(scope.issue);
 
         console.groupEnd();
-        //console.log('oldScopeCardBox after', {'1':oldScopeCardBox, '2':columnScope[old_status]});
 
         $scope.$apply();
 

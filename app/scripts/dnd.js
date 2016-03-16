@@ -358,25 +358,8 @@ function dropCardRelocate(e, drawnElement) {
      карточка) и карточки. Если они разные, значит, переместили в другую колонку*/
     if (this.dataset.taskStatus != drawnElement.dataset.taskStatus) {
 
-        var scope = angular.element(drawnElement).scope()/*,
-            parentScope = angular.element(drawnElement.parentNode).scope(),
-            transferParams = dragStore.getTransferParams();*/
-        /*scope.$apply(function(){
-         /!*console.log('%celement', 'font-size:20px', {
-         drawnElement:drawnElement,
-         transferParams:transferParams,
-         // if(drawnElement.dataset.dropTarget==card)
-         taskStatusStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
-         });
-         proLog('$apply here');*!/
-         //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
-         scope.elementParent = parentScope;
-         });*/
-        //scope.elementParent = parentScope;
-        //scope.mess = 'Something changed';
+        var scope = angular.element(drawnElement).scope();
         scope.relocateCard(scope, [ drawnElement.dataset.taskStatus, this.dataset.taskStatus ]);
-
-        // this.appendChild(drawnElement);
 
     } else {
         console.log('%ctaskStatusStart==\ndrawnElement.dataset.taskStatus',
@@ -414,39 +397,47 @@ function dropCardPanelRelocate(e, drawnElement) {
  */
 function dropCardBottomPanelCopy(e, drawnElement) {
     console.groupCollapsed('%c dropCardBottomPanelCopy', 'color:rebeccapurple', showArgs(arguments));
-    var taskId = getTaskId(drawnElement),
-        drawnElementPanel = dragStore.getDrawnElement(taskId),
-        row = e.target, clone, cloned = document.getElementById('task' + taskId + '_');
+    var //taskId = getTaskId(drawnElement),  // 4 // нужно для извлечения подстрок
+        panel_id_suffix=this.id.substr(this.id.lastIndexOf("-")+1),
+        panel,
+        clonedIdSuffix='_'+panel_id_suffix+'_'; // 4_0_
 
-    // выяснить, нет ли уже такой (в т.ч. на панелях)
-    if (cloned) {
-        console.log('%cблокировано дублирование карточки id ' + taskId + '_', 'color: red');
-        console.groupEnd();
-        return false;
+    console.log({
+        clonedIdSuffix:clonedIdSuffix,
+        thisId: this.id
+    });
+
+    // нет "_", пришли из группы
+    if(!(drawnElement.id.lastIndexOf("_")==drawnElement.id.length-1)) {
+        drawnElement.id+=clonedIdSuffix; // task4_0_
+        panel=this;
+        panel.appendChild(drawnElement);
+    }else{  // пришли с другой панели (сорри за калмбур)
+        panel=document.getElementById(this.id);
+        var clone=drawnElement.cloneNode();
+        // task4_1_0_
+        clone.id=drawnElement.id.substring(0,drawnElement.id.indexOf("_"))+clonedIdSuffix;
+        clone.innerHTML = drawnElement.innerHTML;
+        console.log({
+            '-3 clone':clone,
+            '-2 clonedIdSuffix':clonedIdSuffix,
+            '-1 panel_id_suffix':panel_id_suffix,
+            '0 drawnElement': drawnElement,
+            '1 sectionId':this.id,
+            '2 panel':panel,
+            //'3 taskId': taskId,
+            '4 parentNode': drawnElement.parentNode,
+            '5 selector': '#'+this.id+' #'+clone.id,
+            '6 found': document.querySelector('#'+this.id+' #'+clone.id)
+        });
+        if(document.querySelector('#'+this.id+' #'+clone.id)){
+            console.log('%cблокировано дублирование карточки');
+            console.groupEnd();
+            return false;
+        }else{
+            panel.appendChild(clone);
+        }
     }
-    /**
-     если пытаемся засунуть карточку внутрь другой карточки,
-     передвинем всё на уровень выше */
-    if (e.target.dataset.dropTarget &&
-        e.target.dataset.dropTarget == 'card') {
-        row = row.parentNode;
-    }
-    /**
-     если пытались засунули ещё глубже -- внутрь блока с командой,
-     удаляющей карточку, поднимемся выше на 2 уровня   */
-    if (e.target.parentNode.dataset.dropTarget &&
-        e.target.parentNode.dataset.dropTarget == 'card') {
-        row = row.parentNode.parentNode;
-    }
-    console.log({drawnElement: drawnElement, taskId: taskId, drawnElementPanel: drawnElementPanel, row: row});
-    clone = drawnElement.cloneNode(true);
-    clone.id = clone.id + '_';
-    console.log('clone: ', clone);
-    /** добавить в конец панели; да, можно сделать
-     ещё красивше, но совершенству нет предела вообще */
-    row.appendChild(clone);
-    console.log('row after adding clone: ', row);
-    dragStore.setDrawnElement(clone, taskId);
     console.groupEnd();
     // удалить с клона класс-эффект
     removeElementClass(2);
