@@ -1,15 +1,21 @@
+var taskStatusStart;
 // тут будут закрома
 function dragStoreInit() {
     console.groupCollapsed('dragStoreInit', showArgs(arguments));
     var drawnElement,
         drawnElementsPanel = {},
         eventsMap = {
-            dragstart:  dragStart,
-            dragover:   dragOver,
-            dragenter:  dragEnter,
-            dragleave:  dragLeave,
-            drop:       drop,
-            dragend:    dragEnd
+            drag:{
+                dragstart:  dragStart,
+                //dragover:   dragOver,
+                dragenter:  dragEnter,
+                dragleave:  dragLeave,
+                dragend:    dragEnd
+            },
+            drop:{
+                dragover:   dragOver,
+                drop:       drop
+            }
         },
         classes = {1: 'over', 2: 'moving'},
         currentTarget, currentThis;
@@ -62,10 +68,10 @@ function dragStoreInit() {
             console.groupEnd();
         },
         //
-        setListeners: function (element) {
-            for (var event in eventsMap) {
-                if (eventsMap.hasOwnProperty(event)) {
-                    element.addEventListener(event, eventsMap[event], false);
+        setListeners: function (element, event_type) {
+            for (var event in eventsMap[event_type]) {
+                if (eventsMap[event_type].hasOwnProperty(event)) {
+                    element.addEventListener(event, eventsMap[event_type][event], false);
                 }
             }
 
@@ -74,16 +80,6 @@ function dragStoreInit() {
     console.log('return %csetupData ', 'color:green', setupData);
     console.groupEnd();
     return setupData;
-}
-
-
-
-function showArgs(){
-    var args=[];
-    for(var i= 0, j=arguments.length; i<j; i++){
-        args.push(arguments[i]);
-    }
-    return args;
 }
 /**
  * Предотвращает "всплывание" события
@@ -110,6 +106,7 @@ function dragStart(e) {
     // сохранить текущий активный элемент для обработки при следующих событиях
     dragStore.setDrawnElement(e.target);
     dragStore.setTransferParams(e.target, this);
+    taskStatusStart= e.target.dataset.taskStatus;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', e.target.innerHTML);
 
@@ -151,7 +148,7 @@ function drop(e) {
         thisDropArea = this.dataset.dropArea,
         transferParams = dragStore.getTransferParams(),
         transferDatasetThis = transferParams.eThis.dataset,
-        transferDatasetTarget = transferParams.eTarget.dataset,
+        //transferDatasetTarget = transferParams.eTarget.dataset,
         drawnElementDropTarget,
         dropTargetEndPanel;
 
@@ -239,7 +236,8 @@ function drop(e) {
             console.log('%creturns false', 'color: navy'); console.groupEnd();
             return false;
         }
-        dropCardRelocate.call(this, e, drawnElement);
+        if(this.dataset.taskStatus)
+            dropCardRelocate.call(this, e, drawnElement);
         console.log('%creturns false', 'color: navy'); console.groupEnd();
         return false;
     }
@@ -327,18 +325,84 @@ function dropPanelExchange(e, drawnElement){
  * @param drawnElement ─ target-event
  */
 function dropCardRelocate(e, drawnElement) {
+    /**
+     * ВНИМАНИЕ! Функция вызывается
+     */
+
     console.group('%c dropCardRelocate', 'font-weight:normal; color:white; background-color: #999; padding:4px 10px', showArgs(arguments),
         { '1 e.target': e.target, '2 drawnElement':drawnElement }
     );
+    console.trace('%ctrace', 'color: brown');
     // Если собираемся сбрасывать не туда же, откуда пришли
     if (drawnElement != this) {
-        // назначим статус текущей группы (не заменять на класс!)
+        console.log('%ccompare statuses', 'background-color: rgb(255,0,255)',{
+            taskStatusStart:taskStatusStart,
+            taskStatus:drawnElement.dataset.taskStatus
+        });
+        /**
+        clarify: срабатывает ТОЛЬКО (и здесь!), если процедура присваивания
+        вынесена из этого следующего блоков */
+        if(taskStatusStart!=drawnElement.dataset.taskStatus) {
+            console.log('%ctaskStatusStart!=\ndrawnElement.dataset.taskStatus',
+                    'font-size:13px; background-color: lightyellow', {
+                drawnElement: drawnElement,
+                transferParams: transferParams,
+                dataStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
+            });
+            var scope = angular.element(drawnElement).scope(),
+                parentScope = angular.element(drawnElement.parentNode).scope(),
+                transferParams = dragStore.getTransferParams();
+            /*scope.$apply(function(){
+             /!*console.log('%celement', 'font-size:20px', {
+             drawnElement:drawnElement,
+             transferParams:transferParams,
+             // if(drawnElement.dataset.dropTarget==card)
+             taskStatusStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
+             });
+             proLog('$apply here');*!/
+             //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
+             scope.elementParent = parentScope;
+             });*/
+            scope.elementParent = parentScope;
+            scope.mess = 'Something changed';
+            scope.relocateCard(scope, 'dropCardRelocate');
+            // назначим статус текущей группы (не заменять на класс!)
+            /*if(e.target.dataset.dropTarget){
+                console.log('%cdirection: forward', 'background-color:brown');
+                // relocation forward
+                if(e.target.parentNode.dataset.taskStatus){
+                    //e.target.parentNode.insertBefore(drawnElement, e.target);
+                    // sync group alias between card and its container
+                    drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
+                }
+            }else{
+                console.log('%cdirection: backward', 'background-color:violet');
+                // relocation backward
+                if(e.target.dataset.taskStatus){
+                    //e.target.appendChild(drawnElement);
+                    // sync group alias between card and its container
+                    drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
+                }
+            }*/
+        }else{
+            console.log('%ctaskStatusStart==\ndrawnElement.dataset.taskStatus',
+                    'font-size:13px; background-color: lightgreen', {
+                drawnElement: drawnElement,
+                transferParams: transferParams,
+                dataStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
+            });
+            if(e.target.dataset.dropTarget){
+                if(e.target.parentNode.dataset.taskStatus){
+                    e.target.parentNode.insertBefore(drawnElement, e.target);
+                }
+            }else{
+                e.target.appendChild(drawnElement);
+            }
+        }
         if(e.target.dataset.dropTarget){
-            console.log('%cdirection: forward', 'background-color:brown');
-            // relocation forward
             if(e.target.parentNode.dataset.taskStatus){
-                drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
-                e.target.parentNode.insertBefore(drawnElement, e.target);
+                console.log('%cdirection: forward', 'background-color:brown');
+                //e.target.parentNode.insertBefore(drawnElement, e.target);
                 // sync group alias between card and its container
                 drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
             }
@@ -346,20 +410,11 @@ function dropCardRelocate(e, drawnElement) {
             console.log('%cdirection: backward', 'background-color:violet');
             // relocation backward
             if(e.target.dataset.taskStatus){
-                drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
-                e.target.appendChild(drawnElement);
+                //e.target.appendChild(drawnElement);
                 // sync group alias between card and its container
                 drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
             }
         }
-        var scope = angular.element(drawnElement).scope(),
-            parentScope = angular.element(drawnElement).scope();
-        /*scope.$apply(function(){
-            alert('Got it!');
-            console.log('%celement', 'font-size:20px', this);
-            //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
-        });*/
-        scope.relocateCard(scope);
     }
     console.groupEnd();
 }
@@ -493,10 +548,11 @@ function dragLeave(e) {
  */
 function prepareToDrop(e) {
     var drawnElement = dragStore.getDrawnElement();
+    console.log('prepareToDrop, %cgetDrawnElement', 'background-color: lightskyblue', drawnElement);
     // получить последний сохранённый элемент
     return drawnElement;
 }
-
+//===Test functions===►
 function passElement(el){
     var scope = angular.element(el).scope();
     scope.$apply(function(){
@@ -505,4 +561,14 @@ function passElement(el){
         //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
     });
     scope.relocateCard(scope);
+}
+function showArgs(){
+    var args=[];
+    for(var i= 0, j=arguments.length; i<j; i++){
+        args.push(arguments[i]);
+    }
+    return args;
+}
+function proLog(){
+    console.log('prolog %cvalue: ', 'background-color: lime', arguments);
 }

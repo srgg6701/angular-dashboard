@@ -10,12 +10,12 @@ app.directive('dashboardTemplate', function(){
     directive('draggableElement', function(){
         return function(scope, element){
             element[0].draggable = true;
-            window.dragStore.setListeners(element[0]);
+            window.dragStore.setListeners(element[0], 'drag');
         }
 })  // вызывать установщика наблюдателей для принимающих элементов
     .directive('droppableElement', function(){
         return function(scope, element){
-            window.dragStore.setListeners(element[0]);
+            window.dragStore.setListeners(element[0], 'drop');
         }
 })
     .directive('cardsRemove', function(){
@@ -30,8 +30,8 @@ app.directive('dashboardTemplate', function(){
             scope: {
                 clickgroupremove: '&',
                 clickpanelremove: '&',
-                clickcardremove: '&',
-                dropcardrelocate: '&'
+                clickcardremove: '&'/*,
+                dropcardrelocate: '&'*/
             },
             link: function(scope, element) {
                 ['card', 'group', 'panel'].forEach(function(target){

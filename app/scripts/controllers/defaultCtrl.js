@@ -8,9 +8,12 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
     $scope.newgroup={};
     $scope.newcategory={};
 
-    $scope.relocateCard = function(scope){ //card
+    $scope.relocateCardApply = function(){
+        console.log('%ccard (relocateCardApply)', 'font-size:20px; background-color:orange', { card:scope.issue, scope:scope });
+    };
+    $scope.relocateCard = function(scope, function_name){ //card
         //alert('relocate!');
-        console.log('%ccard', 'font-size:20px', scope);
+        console.log('%ccard', 'font-size:20px; background-color:yellow', { function:function_name, card:scope.issue, scope:scope });
     };
 
     $scope.removeColumn = function(status){
