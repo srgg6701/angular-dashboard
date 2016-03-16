@@ -1,11 +1,9 @@
 <div id="box-columns" class="cards-container">
     <div data-card-type="{{status}}" draggable-element  droppable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="(status, data) in dashboard.columns">
         <header data-drop-target="column">{{data[0]}} <div cards-remove clickgroupremove="removeColumn(status)">+</div></header>
-        <!--myObject.value == 'ok' ? { 'width':'100%', color:'green' } : { 'width': '0%' }"-->
         <div ng-style="{'background-color' : data[2][0]}" droppable-element data-task-status="{{status}}">
-            <!--droppable-element-->
             <div draggable-element id="task{{issue[0]}}" data-task-status="{{status}}" data-drop-target="card" class="card" ng-repeat="issue in data[1]">{{issue[1]}}
-                <div class="remove" cards-remove clickcardremove="removeCard(issue[0], status, this.issue)" data-action="remove-card-copy"></div><!--dropcardrelocate="relocateCard(this)"  ondrop="passElement(this)"-->
+                <div class="remove" cards-remove clickcardremove="removeCard(issue[0], status, this.issue)" data-action="remove-card-copy"></div>
             </div>
         </div>
     </div>

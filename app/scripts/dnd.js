@@ -1,8 +1,6 @@
-// todo: (?) убрать за ненадобностью
-var taskStatusStart;
 // тут будут закрома
 function dragStoreInit() {
-    console.groupCollapsed('dragStoreInit', showArgs(arguments));
+    //console.groupCollapsed('dragStoreInit', showArgs(arguments));
     var drawnElement,
         drawnElementsPanel = {},
         eventsMap = {
@@ -78,8 +76,8 @@ function dragStoreInit() {
 
         }
     };
-    console.log('return %csetupData ', 'color:green', setupData);
-    console.groupEnd();
+    //console.log('return %csetupData ', 'color:green', setupData);
+    //console.groupEnd();
     return setupData;
 }
 /**
@@ -346,25 +344,20 @@ function dropCardRelocate(e, drawnElement) {
         'font-weight:normal; color:white; background-color: #999; padding:4px 10px',
         showArgs(arguments)
     );
-
-    console.log('%ccompare statuses', 'background-color: rgb(255,0,255)', {
-        eTarget: e.target,
-        this: this,
-        taskStatusColumn: this.dataset.taskStatus,
-        drawnElement: drawnElement,
-        //taskStatusStart: taskStatusStart,
-        taskStatus: drawnElement.dataset.taskStatus
+    /*console.group('compare statuses%c', 'font-weight: 100', { 'card': drawnElement.dataset.taskStatus,
+                'column': this.dataset.taskStatus });
+    console.groupEnd();*/
+    console.log({
+        '0 drawnElement': drawnElement,
+        '1 e.target': e.target,
+        '2 this':this,
+        '3 eTarget==this': e.target==this
     });
     /**
-    Сравнить статус задач родительской колонки (та, куда перемещается
-    карточка) и карточки. Если они разные, значит, переместили в другую колонку*/
+     Сравнить статус задач родительской колонки (та, куда перемещается
+     карточка) и карточки. Если они разные, значит, переместили в другую колонку*/
     if (this.dataset.taskStatus != drawnElement.dataset.taskStatus) {
-        console.log('%ctaskStatusStart!=\ndrawnElement.dataset.taskStatus',
-            'font-size:13px; background-color: lightyellow', {
-                drawnElement: drawnElement,
-                transferParams: transferParams,
-                dataStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
-            });
+
         var scope = angular.element(drawnElement).scope(),
             parentScope = angular.element(drawnElement.parentNode).scope(),
             transferParams = dragStore.getTransferParams();
@@ -381,7 +374,7 @@ function dropCardRelocate(e, drawnElement) {
          });*/
         scope.elementParent = parentScope;
         scope.mess = 'Something changed';
-        scope.relocateCard(scope, 'dropCardRelocate');
+        scope.relocateCard(scope, [ drawnElement.dataset.taskStatus, this.dataset.taskStatus ]);
 
         this.appendChild(drawnElement);
 
@@ -394,11 +387,6 @@ function dropCardRelocate(e, drawnElement) {
             });
         this.appendChild(drawnElement);
     }
-
-    console.log('%cApply taskStatus', 'background-color: orange', {
-        currtent: drawnElement.dataset.taskStatus,
-        parent: this.dataset.taskStatus
-    });
 
     drawnElement.dataset.taskStatus = this.dataset.taskStatus;
 
