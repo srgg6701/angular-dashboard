@@ -530,7 +530,31 @@ function showArgs() {
 function proLog() {
     console.log('prolog %cvalue: ', 'background-color: lime', arguments);
 }
-function hideCard(card){
-    var cardScope = angular.element(card.parentNode).scope();
-    cardScope.imposeCard(cardScope);
+function hideCard(deleter){
+    var card=deleter.parentNode,
+        cardScope = angular.element(card).scope(),
+        cardIdNative;
+    // task4
+    if(card.id[card.id.length-1]!='_'){
+        try{
+            cardIdNative=card.id.substr(4);
+            console.log({cardId:card.id, cartdIdNative: cardIdNative});
+            var tasks = document.querySelectorAll('[id^="task'+cardIdNative+'_"]');
+            cardScope.imposeCard(cardScope);
+
+            console.log({
+                'tasks':tasks,
+                selector: '[id|="task'+cardIdNative+'_"]'
+            });
+            // прячем блоки, в scope -- удалим
+            for(var i=0, j=tasks.length; i<j; i++){
+                tasks[i].style.display='none';
+            }
+        }catch(e){
+            console.error(e.message);
+        }
+    }else{
+        cardScope.removeClone([cardScope, card.parentNode.id]);
+        card.style.display='none';
+    }
 }

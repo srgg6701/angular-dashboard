@@ -32,7 +32,8 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
         });
         console.log('oldScopeCardBox before', {'1':oldScopeCardBox, '2':columnScope[old_status]});
 
-        var cardScope = oldScopeCardBox.splice(scope.$index,1);
+        //var cardScope =
+        oldScopeCardBox.splice(scope.$index,1);
         newScopeCardBox.push(scope.issue);
 
         console.groupEnd();
@@ -42,7 +43,20 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
     };
 
     $scope.imposeCard = function(cardScope){
-      console.log('imposeCard', cardScope);
+        var index = cardScope.$index,
+            parentData = cardScope.$parent.data[1];
+        console.log({
+            'index':index,
+            'cardScope':cardScope,
+            'parentData1': parentData
+        });
+        parentData.splice(index,1);
+        $scope.$apply();
+        console.log('scope', $scope);
+    };
+
+    $scope.removeClone = function(){
+        console.log('removeClone', arguments);
     };
 
     $scope.removeColumn = function(status){

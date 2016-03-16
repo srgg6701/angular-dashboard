@@ -11,7 +11,7 @@
     </div>
 </div>
 <h4>Categories</h4>
-<div draggable-element  id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
+<div draggable-element id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
     <header>{{data[0]}} <div cards-remove clickpanelremove="removePanel(status)">+</div></header>
     <section id="box-rows-{{$index}}" droppable-element data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
     </section>
