@@ -30,7 +30,6 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
             },
             '5 $scope': $scope
         });
-
         console.log('oldScopeCardBox before', {'1':oldScopeCardBox, '2':columnScope[old_status]});
 
         var cardScope = oldScopeCardBox.splice(scope.$index,1);

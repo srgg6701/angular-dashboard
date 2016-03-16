@@ -399,34 +399,28 @@ function dropCardBottomPanelCopy(e, drawnElement) {
     console.groupCollapsed('%c dropCardBottomPanelCopy', 'color:rebeccapurple', showArgs(arguments));
     var //taskId = getTaskId(drawnElement),  // 4 // нужно для извлечения подстрок
         panel_id_suffix=this.id.substr(this.id.lastIndexOf("-")+1),
-        panel,
+        clone = drawnElement.cloneNode(),
         clonedIdSuffix='_'+panel_id_suffix+'_'; // 4_0_
 
-    console.log({
+    clone.innerHTML = drawnElement.innerHTML;
+
+    /*console.log({
         clonedIdSuffix:clonedIdSuffix,
         thisId: this.id
-    });
+    });*/
 
     // нет "_", пришли из группы
-    if(!(drawnElement.id.lastIndexOf("_")==drawnElement.id.length-1)) {
-        drawnElement.id+=clonedIdSuffix; // task4_0_
-        panel=this;
-        panel.appendChild(drawnElement);
+    if(!(clone.id.lastIndexOf("_")==clone.id.length-1)) {
+        clone.id+=clonedIdSuffix; // task4_0_
     }else{  // пришли с другой панели (сорри за калмбур)
-        panel=document.getElementById(this.id);
-        var clone=drawnElement.cloneNode();
         // task4_1_0_
-        clone.id=drawnElement.id.substring(0,drawnElement.id.indexOf("_"))+clonedIdSuffix;
-        clone.innerHTML = drawnElement.innerHTML;
+        clone.id=clone.id.substring(0,clone.id.indexOf("_"))+clonedIdSuffix;
         console.log({
             '-3 clone':clone,
             '-2 clonedIdSuffix':clonedIdSuffix,
-            '-1 panel_id_suffix':panel_id_suffix,
             '0 drawnElement': drawnElement,
             '1 sectionId':this.id,
-            '2 panel':panel,
             //'3 taskId': taskId,
-            '4 parentNode': drawnElement.parentNode,
             '5 selector': '#'+this.id+' #'+clone.id,
             '6 found': document.querySelector('#'+this.id+' #'+clone.id)
         });
@@ -434,10 +428,9 @@ function dropCardBottomPanelCopy(e, drawnElement) {
             console.log('%cблокировано дублирование карточки');
             console.groupEnd();
             return false;
-        }else{
-            panel.appendChild(clone);
         }
     }
+    this.appendChild(clone);
     console.groupEnd();
     // удалить с клона класс-эффект
     removeElementClass(2);
