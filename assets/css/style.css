@@ -10,10 +10,18 @@ h1, h2, h3, h4, h5, header{
     font-family: Verdana, serif;
 }
 header{
-    color: whitesmoke;
-    font-weight: bold;
     background-color: #444;
     padding: 10px;
+}
+header>input{
+    background-color: transparent;
+    border: 0;
+    color: whitesmoke;
+    font-weight: bold;
+    font-family: Verdana, Serif;
+    font-size: 15px;
+    padding: 0;
+    width: calc(100% - 120px);
 }
 header div{
     border-radius: 50%;
@@ -25,8 +33,9 @@ header div{
     text-align: center;
     width: 24px;
 }
-header>div:first-child{
+header div.remove-group{
     background-color: red;
+    display:inherit;
     margin-right: -1px;
     transform: rotate(45deg);
 }

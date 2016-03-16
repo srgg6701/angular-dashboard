@@ -537,7 +537,7 @@ function hideCard(deleter){
     // task4
     if(card.id[card.id.length-1]!='_'){
         try{
-            cardScope = angular.element(card).scope()
+            cardScope = angular.element(card).scope();
             cardIdNative=card.id.substr(4);
             console.log({cardId:card.id, cartdIdNative: cardIdNative});
             var tasks = document.querySelectorAll('[id^="task'+cardIdNative+'_"]');
