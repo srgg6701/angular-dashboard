@@ -199,7 +199,7 @@ function drop(e) {
          '2 this.children':this.children
          });*/
         // проверить все элементы в контейнере
-        if (/*dropTargetEndPanel=*/this.dataset.dropTarget == 'card-panel') {
+        if (this.dataset.dropTarget == 'card-panel') {
             for (var i = 0, j = this.children.length; i < j; i++) {
                 // если обнаружен клон, прерываем выполнение функции
                 if (this.children[i].id == drawnElement.id + '_') {

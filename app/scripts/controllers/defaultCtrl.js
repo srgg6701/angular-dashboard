@@ -9,7 +9,7 @@ app.controller('defaultCtrl', function ($scope, DashboardContents, DashboardActi
     $scope.newcategory={};
 
     $scope.relocateCard = function(scope, statuses){ //card
-        //alert('relocate!');
+
         var columnScope = $scope.dashboard.columns,
             old_status=statuses[0], new_status=statuses[1],
             oldScopeCardBox=columnScope[old_status][1], newScopeCardBox=columnScope[new_status][1];
