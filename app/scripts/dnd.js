@@ -358,9 +358,9 @@ function dropCardRelocate(e, drawnElement) {
      карточка) и карточки. Если они разные, значит, переместили в другую колонку*/
     if (this.dataset.taskStatus != drawnElement.dataset.taskStatus) {
 
-        var scope = angular.element(drawnElement).scope(),
+        var scope = angular.element(drawnElement).scope()/*,
             parentScope = angular.element(drawnElement.parentNode).scope(),
-            transferParams = dragStore.getTransferParams();
+            transferParams = dragStore.getTransferParams();*/
         /*scope.$apply(function(){
          /!*console.log('%celement', 'font-size:20px', {
          drawnElement:drawnElement,
@@ -372,11 +372,11 @@ function dropCardRelocate(e, drawnElement) {
          //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
          scope.elementParent = parentScope;
          });*/
-        scope.elementParent = parentScope;
-        scope.mess = 'Something changed';
+        //scope.elementParent = parentScope;
+        //scope.mess = 'Something changed';
         scope.relocateCard(scope, [ drawnElement.dataset.taskStatus, this.dataset.taskStatus ]);
 
-        this.appendChild(drawnElement);
+        // this.appendChild(drawnElement);
 
     } else {
         console.log('%ctaskStatusStart==\ndrawnElement.dataset.taskStatus',
@@ -545,4 +545,8 @@ function showArgs() {
 }
 function proLog() {
     console.log('prolog %cvalue: ', 'background-color: lime', arguments);
+}
+function hideCard(card){
+    var cardScope = angular.element(card.parentNode).scope();
+    cardScope.imposeCard(cardScope);
 }

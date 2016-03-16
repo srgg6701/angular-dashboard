@@ -29,12 +29,12 @@ app.directive('dashboardTemplate', function(){
         return {
             scope: {
                 clickgroupremove: '&',
-                clickpanelremove: '&',
-                clickcardremove: '&'/*,
+                clickpanelremove: '&'/*,
+                clickcardremove: '&',
                 dropcardrelocate: '&'*/
             },
             link: function(scope, element) {
-                ['card', 'group', 'panel'].forEach(function(target){
+                [/*'card', */'group', 'panel'].forEach(function(target){
                     if(element[0].getAttribute('click'+target+'remove'))
                         addListener.call(element[0],target, scope);
                 });/*

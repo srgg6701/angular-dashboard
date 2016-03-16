@@ -3,7 +3,9 @@
         <header data-drop-target="column">{{data[0]}} <div cards-remove clickgroupremove="removeColumn(status)">+</div></header>
         <div ng-style="{'background-color' : data[2][0]}" droppable-element data-task-status="{{status}}">
             <div draggable-element id="task{{issue[0]}}" data-task-status="{{status}}" data-drop-target="card" class="card" ng-repeat="issue in data[1]">{{issue[1]}}
-                <div class="remove" cards-remove clickcardremove="removeCard(issue[0], status, this.issue)" data-action="remove-card-copy"></div>
+                <!--clickcardremove="removeCard(issue[0], status, this.issue)"-->
+                <div class="remove" onclick="hideCard(this)"></div>
+                <!-- ng-click="hideCard($event)"-->
             </div>
         </div>
     </div>
