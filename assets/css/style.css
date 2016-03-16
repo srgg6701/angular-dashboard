@@ -118,6 +118,9 @@ main > h5{
     padding: 10px;
     padding-right: 26px;
 }
+div[style] .card{
+    background-color: whitesmoke;
+}
 .cards-box{
     min-height: 68px;
 }
@@ -149,7 +152,8 @@ main > h5{
 }
 .column>[data-task-status]{
     min-height: 88px;
-    padding:10px;
+    padding: 10px;
+    padding-bottom: 1px;
 }
 .column>[data-task-status="new"]{
     background-color: #D063CA;

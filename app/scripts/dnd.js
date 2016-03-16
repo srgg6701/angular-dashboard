@@ -1,3 +1,4 @@
+// todo: (?) убрать за ненадобностью
 var taskStatusStart;
 // тут будут закрома
 function dragStoreInit() {
@@ -5,16 +6,16 @@ function dragStoreInit() {
     var drawnElement,
         drawnElementsPanel = {},
         eventsMap = {
-            drag:{
-                dragstart:  dragStart,
+            drag: {
+                dragstart: dragStart,
                 //dragover:   dragOver,
-                dragenter:  dragEnter,
-                dragleave:  dragLeave,
-                dragend:    dragEnd
+                dragenter: dragEnter,
+                dragleave: dragLeave,
+                dragend: dragEnd
             },
-            drop:{
-                dragover:   dragOver,
-                drop:       drop
+            drop: {
+                dragover: dragOver,
+                drop: drop
             }
         },
         classes = {1: 'over', 2: 'moving'},
@@ -25,10 +26,10 @@ function dragStoreInit() {
             return classes[number];
         },
         getDrawnElement: function (key) {
-            console.group('dragStore.getDrawnElement', showArgs(arguments));
+            //console.group('dragStore.getDrawnElement', showArgs(arguments));
             var element = key ? drawnElementsPanel[key] : drawnElement;
-            console.log('element: ', element);
-            console.groupEnd();
+            //console.log('element: ', element);
+            //console.groupEnd();
             return element;
         },
         // вызывается в dragStart
@@ -93,10 +94,10 @@ function dragStart(e) {
     if (e.stopPropagation) { // предотвратить дальнейшее распространение
         e.stopPropagation();
     }
-    console.groupCollapsed('%cdragStart', 'background-color:rgb(180,180,255); padding:4px 10px',{
-        '0 e.srcElement':e.srcElement,
-        '1 e.target':e.target,
-        '2 toElement':e.toElement,
+    console.groupCollapsed('%cdragStart', 'background-color:rgb(180,180,255); padding:4px 10px', {
+        '0 e.srcElement': e.srcElement,
+        '1 e.target': e.target,
+        '2 toElement': e.toElement,
         '3 e': e,
         '4 this': this
     }, showArgs(arguments));
@@ -106,11 +107,11 @@ function dragStart(e) {
     // сохранить текущий активный элемент для обработки при следующих событиях
     dragStore.setDrawnElement(e.target);
     dragStore.setTransferParams(e.target, this);
-    taskStatusStart= e.target.dataset.taskStatus;
+    taskStatusStart = e.target.dataset.taskStatus;
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', e.target.innerHTML);
 
-        console.log('e.dataTransfer',  e.dataTransfer);
+    console.log('e.dataTransfer', e.dataTransfer);
     console.groupEnd();
 }
 /**
@@ -142,67 +143,70 @@ function dragOver(e) {
 function drop(e) {
     // e.target ─ элемент, на котором возникло событие drop
     var dropTargetStart = e.target.dataset.dropTarget,
-        // элемент-инициатор перемещения; содержит класс "moving"
+    // элемент-инициатор перемещения; содержит класс "moving"
         drawnElement = prepareToDrop(e),
         drawnElementDropArea = drawnElement.dataset.dropArea,
         thisDropArea = this.dataset.dropArea,
         transferParams = dragStore.getTransferParams(),
         transferDatasetThis = transferParams.eThis.dataset,
-        //transferDatasetTarget = transferParams.eTarget.dataset,
-        drawnElementDropTarget,
-        dropTargetEndPanel;
+    //transferDatasetTarget = transferParams.eTarget.dataset,
+    //dropTargetEndPanel,
+        drawnElementDropTarget;
 
     console.group('%cdrop', 'color:orange', {
         '1 drawnElement': drawnElement,
         '2 this': this,
-        '3 drawnElementDropArea':drawnElementDropArea,
+        '3 drawnElementDropArea': drawnElementDropArea,
         '4 dropTargetStart': dropTargetStart,
         '5 drawnElementDropTarget': drawnElement.dataset.dropTarget,
-        '6 dropTargetEndPanel': (this.dataset.dropTarget=='card-panel'),
-        '7 e': e,
-        '8 e.srcElement': e.srcElement,
-        '9 e.target': e.target,
-        '10 e.target.id': e.target.id,
-        '11 transferParams': transferParams
+        //'6 dropTargetEndPanel': (this.dataset.dropTarget=='card-panel'),
+        '6 e': e,
+        '7 e.srcElement': e.srcElement,
+        '8 e.target': e.target,
+        '9 e.target.id': e.target.id,
+        'transferParams': transferParams
     }, showArgs(arguments));
 
     // пытаемся переместить из панели в группу или между панелями
-    if( transferDatasetThis.dropArea &&
-        transferDatasetThis.dropArea=='panel'
-      ){
-        if(dropTargetStart){
-            if( dropTargetStart =='card-panel' &&
-                transferParams.eThis.id!== e.target.id
-            ){
+    if (transferDatasetThis.dropArea &&
+        transferDatasetThis.dropArea == 'panel'
+    ) {
+        if (dropTargetStart) {
+            if (dropTargetStart == 'card-panel' &&
+                transferParams.eThis.id !== e.target.id
+            ) {
                 dropCardPanelRelocate.call(this, e, drawnElement);
             }
         }
-        console.log('%creturn false', 'color:green; font-size:13px');console.groupEnd();
+        console.log('%creturn false', 'color:green; font-size:13px');
+        console.groupEnd();
         return false;
     }
 
-    if( e.target.id && drawnElement.id &&
-        ( e.target.id==drawnElement.id || /**
-            Проверяется при перемещении карточки из группы на нижнюю панель.
-            Сработает, если копия карточки сбрасываетя непосредственно на
-            свой предыдущий клон. В противном случае требуется доп. проверка
-            (см. в следующем блоке) */
-          e.target.id==drawnElement.id+'_'
+    if (e.target.id && drawnElement.id &&
+        ( e.target.id == drawnElement.id || /**
+             Проверяется при перемещении карточки из группы на нижнюю панель.
+             Сработает, если копия карточки сбрасываетя непосредственно на
+             свой предыдущий клон. В противном случае требуется доп. проверка
+             (см. в следующем блоке) */
+            e.target.id == drawnElement.id + '_'
         )
-      ) {
-        console.log('%creturns false', 'color: red'); console.groupEnd();
+    ) {
+        console.log('%creturns false', 'color: red');
+        console.groupEnd();
         return false;
-    }else {
-        console.log('%cblock 2', 'color: darkorange', {
-            '1 this.dataset.dropTarget':this.dataset.dropTarget,
-            '2 this.children':this.children
-        });
+    } else {
+        /*console.log('%cblock 2', 'color: darkorange', {
+         '1 this.dataset.dropTarget':this.dataset.dropTarget,
+         '2 this.children':this.children
+         });*/
         // проверить все элементы в контейнере
-        if( dropTargetEndPanel=this.dataset.dropTarget=='card-panel'){
-            for(var i= 0, j=this.children.length; i<j; i++){
+        if (/*dropTargetEndPanel=*/this.dataset.dropTarget == 'card-panel') {
+            for (var i = 0, j = this.children.length; i < j; i++) {
                 // если обнаружен клон, прерываем выполнение функции
-                if(this.children[i].id==drawnElement.id+'_'){
-                    console.log('%creturns false', 'color: red'); console.groupEnd();
+                if (this.children[i].id == drawnElement.id + '_') {
+                    console.log('%creturns false', 'color: red');
+                    console.groupEnd();
                     return false;
                 }
             }
@@ -210,35 +214,47 @@ function drop(e) {
         drawnElementDropTarget = drawnElement.dataset.dropTarget;
     }
     // перемещаем панели
-    if( drawnElementDropArea && thisDropArea &&
-        drawnElementDropArea=='category-container' &&
-        thisDropArea=='category-container'
-    ){
+    if (drawnElementDropArea && thisDropArea &&
+        drawnElementDropArea == 'category-container' &&
+        thisDropArea == 'category-container'
+    ) {
         dropPanelExchange.call(this, e, drawnElement);
-        console.log('%creturns false', 'color: navy'); console.groupEnd();
+        console.log('%creturns false', 'color: navy');
+        console.groupEnd();
         return false;
     }
     // перемещали колонки
-    if(drawnElementDropArea=='column'){
+    if (drawnElementDropArea == 'column') {
         dropColumnExchange.call(this, e, drawnElement);
-        console.log('%creturns false', 'color: red'); console.groupEnd();
+        console.log('%creturns false', 'color: red');
+        console.groupEnd();
         return false;
-    }else{
+    } else {
         // перемещали карточки на нижнюю панель и между панелями
-        if( thisDropArea && thisDropArea=='panel' ||
+        if (thisDropArea && thisDropArea == 'panel' ||
             ( drawnElementDropTarget &&
-              drawnElementDropTarget=='card' &&
-              dropTargetStart &&
-              dropTargetStart =='card-panel'
+                drawnElementDropTarget == 'card' &&
+                dropTargetStart &&
+                dropTargetStart == 'card-panel'
             )
-          ){
+        ) {
             dropCardBottomPanelCopy.call(this, e, drawnElement);
-            console.log('%creturns false', 'color: navy'); console.groupEnd();
+            console.log('%creturns false', 'color: navy');
+            console.groupEnd();
             return false;
         }
-        if(this.dataset.taskStatus)
+        /**
+         Если текущий целевой элемент (подписанный на событие)
+         ─ контейнер карточек.
+         ВНИМАНИЕ! Функция срабатывает как при перемещении
+         карточки в другую группу, так и при изменении порядка
+         расположения карточек в той же самой */
+        if (this.dataset.taskStatus) {
+            // drawnElement ─ карточка
             dropCardRelocate.call(this, e, drawnElement);
-        console.log('%creturns false', 'color: navy'); console.groupEnd();
+        }
+        console.log('%creturns false', 'color: navy');
+        console.groupEnd();
         return false;
     }
     // для подстраховки
@@ -250,45 +266,45 @@ function drop(e) {
  * @param e ─ event
  * @param drawnElement ─ target-event
  */
-function dropColumnExchange(e, drawnElement){
+function dropColumnExchange(e, drawnElement) {
     console.groupCollapsed('%c dropColumnExchange', 'color:white; background-color: blue; padding:4px 10px', showArgs(arguments));
-        console.log({
-            '0 e': e,
-            '1 drawnElement': drawnElement,
-            '2 this': this
-        });
+    console.log({
+        '0 e': e,
+        '1 drawnElement': drawnElement,
+        '2 this': this
+    });
     // Если собираемся сбрасывать не туда же, откуда пришли
     if (drawnElement != this) {
         var // найти нужную колонку, если влезли глубже, чем надо
-            findColumn = function(toColumn, i){
+            findColumn = function (toColumn, i) {
 
-                if(toColumn.tagName.toLocaleLowerCase()=='body'){
+                if (toColumn.tagName.toLocaleLowerCase() == 'body') {
                     console.warn('not found up to "body"');
                     return false;
                 }
 
-                if(toColumn.dataset.dropArea &&
-                    toColumn.dataset.dropArea=='column'){
+                if (toColumn.dataset.dropArea &&
+                    toColumn.dataset.dropArea == 'column') {
                     return toColumn;
-                }else{
-                    if(i>=10){
-                        alert('Группа карточек не найдена после '+i+' итераций');
+                } else {
+                    if (i >= 10) {
+                        alert('Группа карточек не найдена после ' + i + ' итераций');
                         console.warn('Последняя найденная колонка: ', toColumn);
                         return false;
                     }
-                    i=(!i)? 1:i+1;
+                    i = (!i) ? 1 : i + 1;
                     findColumn(toColumn.parentNode, i);
                 }
             },
-            toColumn=findColumn(this);
+            toColumn = findColumn(this);
         // не повезло
-        if(!toColumn) {
+        if (!toColumn) {
             console.groupEnd();
             return false;
-        }else{
+        } else {
             console.log({
-                drawnElement:drawnElement,
-                toColumn:toColumn
+                drawnElement: drawnElement,
+                toColumn: toColumn
             });
         }
         // контент
@@ -302,7 +318,7 @@ function dropColumnExchange(e, drawnElement){
  * @param e ─ event
  * @param drawnElement ─ target-event
  */
-function dropPanelExchange(e, drawnElement){
+function dropPanelExchange(e, drawnElement) {
     console.groupCollapsed('%c dropPanelExchange', 'color:white; background-color: blue; padding:4px 10px', showArgs(arguments));
     console.log({
         '0 e': e,
@@ -314,108 +330,78 @@ function dropPanelExchange(e, drawnElement){
         var storedId = drawnElement.id;
         drawnElement.innerHTML = this.innerHTML;
         this.innerHTML = e.dataTransfer.getData('text/html');
-        drawnElement.id=this.id;
-        this.id=storedId;
+        drawnElement.id = this.id;
+        this.id = storedId;
     }
     console.groupEnd();
 }
 /**
- * Переместить карточку в другую группу
+ * Переместить карточку в другую группу или поменять порядок в той же
  * @param e ─ event
  * @param drawnElement ─ target-event
+ * e.target, this ─ колонка, drawnElement ─ карточка
  */
 function dropCardRelocate(e, drawnElement) {
-    /**
-     * ВНИМАНИЕ! Функция вызывается
-     */
-
-    console.group('%c dropCardRelocate', 'font-weight:normal; color:white; background-color: #999; padding:4px 10px', showArgs(arguments),
-        { '1 e.target': e.target, '2 drawnElement':drawnElement }
+    console.group('%c dropCardRelocate',
+        'font-weight:normal; color:white; background-color: #999; padding:4px 10px',
+        showArgs(arguments)
     );
-    console.trace('%ctrace', 'color: brown');
-    // Если собираемся сбрасывать не туда же, откуда пришли
-    if (drawnElement != this) {
-        console.log('%ccompare statuses', 'background-color: rgb(255,0,255)',{
-            taskStatusStart:taskStatusStart,
-            taskStatus:drawnElement.dataset.taskStatus
-        });
-        /**
-        clarify: срабатывает ТОЛЬКО (и здесь!), если процедура присваивания
-        вынесена из этого следующего блоков */
-        if(taskStatusStart!=drawnElement.dataset.taskStatus) {
-            console.log('%ctaskStatusStart!=\ndrawnElement.dataset.taskStatus',
-                    'font-size:13px; background-color: lightyellow', {
+
+    console.log('%ccompare statuses', 'background-color: rgb(255,0,255)', {
+        eTarget: e.target,
+        this: this,
+        taskStatusColumn: this.dataset.taskStatus,
+        drawnElement: drawnElement,
+        //taskStatusStart: taskStatusStart,
+        taskStatus: drawnElement.dataset.taskStatus
+    });
+    /**
+    Сравнить статус задач родительской колонки (та, куда перемещается
+    карточка) и карточки. Если они разные, значит, переместили в другую колонку*/
+    if (this.dataset.taskStatus != drawnElement.dataset.taskStatus) {
+        console.log('%ctaskStatusStart!=\ndrawnElement.dataset.taskStatus',
+            'font-size:13px; background-color: lightyellow', {
                 drawnElement: drawnElement,
                 transferParams: transferParams,
                 dataStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
             });
-            var scope = angular.element(drawnElement).scope(),
-                parentScope = angular.element(drawnElement.parentNode).scope(),
-                transferParams = dragStore.getTransferParams();
-            /*scope.$apply(function(){
-             /!*console.log('%celement', 'font-size:20px', {
-             drawnElement:drawnElement,
-             transferParams:transferParams,
-             // if(drawnElement.dataset.dropTarget==card)
-             taskStatusStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
-             });
-             proLog('$apply here');*!/
-             //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
-             scope.elementParent = parentScope;
-             });*/
-            scope.elementParent = parentScope;
-            scope.mess = 'Something changed';
-            scope.relocateCard(scope, 'dropCardRelocate');
-            // назначим статус текущей группы (не заменять на класс!)
-            /*if(e.target.dataset.dropTarget){
-                console.log('%cdirection: forward', 'background-color:brown');
-                // relocation forward
-                if(e.target.parentNode.dataset.taskStatus){
-                    //e.target.parentNode.insertBefore(drawnElement, e.target);
-                    // sync group alias between card and its container
-                    drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
-                }
-            }else{
-                console.log('%cdirection: backward', 'background-color:violet');
-                // relocation backward
-                if(e.target.dataset.taskStatus){
-                    //e.target.appendChild(drawnElement);
-                    // sync group alias between card and its container
-                    drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
-                }
-            }*/
-        }else{
-            console.log('%ctaskStatusStart==\ndrawnElement.dataset.taskStatus',
-                    'font-size:13px; background-color: lightgreen', {
+        var scope = angular.element(drawnElement).scope(),
+            parentScope = angular.element(drawnElement.parentNode).scope(),
+            transferParams = dragStore.getTransferParams();
+        /*scope.$apply(function(){
+         /!*console.log('%celement', 'font-size:20px', {
+         drawnElement:drawnElement,
+         transferParams:transferParams,
+         // if(drawnElement.dataset.dropTarget==card)
+         taskStatusStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
+         });
+         proLog('$apply here');*!/
+         //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
+         scope.elementParent = parentScope;
+         });*/
+        scope.elementParent = parentScope;
+        scope.mess = 'Something changed';
+        scope.relocateCard(scope, 'dropCardRelocate');
+
+        this.appendChild(drawnElement);
+
+    } else {
+        console.log('%ctaskStatusStart==\ndrawnElement.dataset.taskStatus',
+            'font-size:13px; background-color: lightgreen', {
                 drawnElement: drawnElement,
                 transferParams: transferParams,
                 dataStart: taskStatusStart // compare to drawnElement.dataset.taskStatus
             });
-            if(e.target.dataset.dropTarget){
-                if(e.target.parentNode.dataset.taskStatus){
-                    e.target.parentNode.insertBefore(drawnElement, e.target);
-                }
-            }else{
-                e.target.appendChild(drawnElement);
-            }
-        }
-        if(e.target.dataset.dropTarget){
-            if(e.target.parentNode.dataset.taskStatus){
-                console.log('%cdirection: forward', 'background-color:brown');
-                //e.target.parentNode.insertBefore(drawnElement, e.target);
-                // sync group alias between card and its container
-                drawnElement.dataset.taskStatus=e.target.parentNode.dataset.taskStatus;
-            }
-        }else{
-            console.log('%cdirection: backward', 'background-color:violet');
-            // relocation backward
-            if(e.target.dataset.taskStatus){
-                //e.target.appendChild(drawnElement);
-                // sync group alias between card and its container
-                drawnElement.dataset.taskStatus=e.target.dataset.taskStatus;
-            }
-        }
+        this.appendChild(drawnElement);
     }
+
+    console.log('%cApply taskStatus', 'background-color: orange', {
+        currtent: drawnElement.dataset.taskStatus,
+        parent: this.dataset.taskStatus
+    });
+
+    drawnElement.dataset.taskStatus = this.dataset.taskStatus;
+
     console.groupEnd();
 }
 /**
@@ -423,9 +409,9 @@ function dropCardRelocate(e, drawnElement) {
  * @param e
  * @param drawnElement
  */
-function dropCardPanelRelocate(e, drawnElement){
+function dropCardPanelRelocate(e, drawnElement) {
     console.group('%c dropCardPanelRelocate', 'font-weight:normal; color:white; background-color: #999; padding:4px 10px', showArgs(arguments),
-        { '1 e.target': e.target, '2 drawnElement':drawnElement }
+        {'1 e.target': e.target, '2 drawnElement': drawnElement}
     );
     // Если собираемся сбрасывать не туда же, откуда пришли
     if (drawnElement != this) {
@@ -442,34 +428,34 @@ function dropCardBottomPanelCopy(e, drawnElement) {
     console.groupCollapsed('%c dropCardBottomPanelCopy', 'color:rebeccapurple', showArgs(arguments));
     var taskId = getTaskId(drawnElement),
         drawnElementPanel = dragStore.getDrawnElement(taskId),
-        row= e.target, clone, cloned = document.getElementById('task'+taskId+'_');
+        row = e.target, clone, cloned = document.getElementById('task' + taskId + '_');
 
     // выяснить, нет ли уже такой (в т.ч. на панелях)
-    if(cloned){
-        console.log('%cблокировано дублирование карточки id '+taskId+'_', 'color: red');
+    if (cloned) {
+        console.log('%cблокировано дублирование карточки id ' + taskId + '_', 'color: red');
         console.groupEnd();
         return false;
     }
     /**
      если пытаемся засунуть карточку внутрь другой карточки,
      передвинем всё на уровень выше */
-    if( e.target.dataset.dropTarget &&
-        e.target.dataset.dropTarget=='card') {
+    if (e.target.dataset.dropTarget &&
+        e.target.dataset.dropTarget == 'card') {
         row = row.parentNode;
     }
     /**
      если пытались засунули ещё глубже -- внутрь блока с командой,
      удаляющей карточку, поднимемся выше на 2 уровня   */
-    if( e.target.parentNode.dataset.dropTarget &&
-        e.target.parentNode.dataset.dropTarget=='card'){
+    if (e.target.parentNode.dataset.dropTarget &&
+        e.target.parentNode.dataset.dropTarget == 'card') {
         row = row.parentNode.parentNode;
     }
-        console.log({ drawnElement:drawnElement, taskId:taskId, drawnElementPanel:drawnElementPanel, row:row });
+    console.log({drawnElement: drawnElement, taskId: taskId, drawnElementPanel: drawnElementPanel, row: row});
     clone = drawnElement.cloneNode(true);
-    clone.id=clone.id+'_';
+    clone.id = clone.id + '_';
     console.log('clone: ', clone);
     /** добавить в конец панели; да, можно сделать
-        ещё красивше, но совершенству нет предела вообще */
+     ещё красивше, но совершенству нет предела вообще */
     row.appendChild(clone);
     console.log('row after adding clone: ', row);
     dragStore.setDrawnElement(clone, taskId);
@@ -482,10 +468,10 @@ function dropCardBottomPanelCopy(e, drawnElement) {
  * @param  e ─ event
  */
 function dragEnd(e) {
-    console.groupCollapsed('%cdragEnd', 'background-color: #333; color: white; padding:4px 10px',{
-        srcElement:arguments[0].srcElement,
-        target:arguments[0].target,
-        toElement:arguments[0].toElement
+    console.groupCollapsed('%cdragEnd', 'background-color: #333; color: white; padding:4px 10px', {
+        srcElement: arguments[0].srcElement,
+        target: arguments[0].target,
+        toElement: arguments[0].toElement
     }, showArgs(arguments));
     if (e.stopPropagation) { // предотвратить дальнейшее распространение
         e.stopPropagation();
@@ -501,7 +487,7 @@ function dragEnd(e) {
  * @param element
  * @returns {string}
  */
-function getTaskId(element){
+function getTaskId(element) {
     console.groupCollapsed('%cgetTaskId', 'color:blue', showArgs(arguments));
     console.log('return: ', element.id.substr(4));
     console.groupEnd();
@@ -512,27 +498,27 @@ function getTaskId(element){
  * @param classNumber
  * @param element
  */
-function addElementClass(element, classNumber){
+function addElementClass(element, classNumber) {
     element.classList.add(dragStore.getClass(classNumber));
 }
 /**
  * Удалить класс (с задержкой, чтобы юзер видел процесс)
  * @param classNumber
  */
-function removeElementClass(classNumber){
-    var cnt= 0,
+function removeElementClass(classNumber) {
+    var cnt = 0,
         className = dragStore.getClass(classNumber),
         el,
-        intrvl = setInterval(function(){
-            if(el=document.getElementsByClassName(className)[0]){
+        intrvl = setInterval(function () {
+            if (el = document.getElementsByClassName(className)[0]) {
                 el.classList.remove(className);
                 clearInterval(intrvl);
             }
             cnt++;
-            if(cnt>50){
+            if (cnt > 50) {
                 clearInterval(intrvl);
             }
-        },100);
+        }, 100);
 }
 /**
  * Применяет к пассивному элементу функцию удаления класса "over"
@@ -548,27 +534,27 @@ function dragLeave(e) {
  */
 function prepareToDrop(e) {
     var drawnElement = dragStore.getDrawnElement();
-    console.log('prepareToDrop, %cgetDrawnElement', 'background-color: lightskyblue', drawnElement);
+    //console.log('prepareToDrop, %cgetDrawnElement', 'background-color: lightskyblue', drawnElement);
     // получить последний сохранённый элемент
     return drawnElement;
 }
 //===Test functions===►
-function passElement(el){
+function passElement(el) {
     var scope = angular.element(el).scope();
-    scope.$apply(function(){
+    scope.$apply(function () {
         alert('Got it!');
         console.log('%celement', 'font-size:20px', this);
         //scope.msg = scope.msg + ' I am the newly addded message from the outside of the controller.';
     });
     scope.relocateCard(scope);
 }
-function showArgs(){
-    var args=[];
-    for(var i= 0, j=arguments.length; i<j; i++){
+function showArgs() {
+    var args = [];
+    for (var i = 0, j = arguments.length; i < j; i++) {
         args.push(arguments[i]);
     }
     return args;
 }
-function proLog(){
+function proLog() {
     console.log('prolog %cvalue: ', 'background-color: lime', arguments);
 }
