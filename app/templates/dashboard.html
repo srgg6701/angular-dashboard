@@ -3,15 +3,13 @@
         <header data-drop-target="column">{{data[0]}} <div cards-remove clickgroupremove="removeColumn(status)">+</div></header>
         <div ng-style="{'background-color' : data[2][0]}" droppable-element data-task-status="{{status}}">
             <div draggable-element id="task{{issue[0]}}" data-task-status="{{status}}" data-drop-target="card" class="card" ng-repeat="issue in data[1]">{{issue[1]}}
-                <!--clickcardremove="removeCard(issue[0], status, this.issue)"-->
                 <div class="remove" onclick="hideCard(this)"></div>
-                <!-- ng-click="hideCard($event)"-->
             </div>
         </div>
     </div>
 </div>
 <h4>Categories</h4>
-<div draggable-element id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
+<div draggable-element droppable-element id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
     <header>{{data[0]}} <div cards-remove clickpanelremove="removePanel(status)">+</div></header>
     <section id="box-rows-{{$index}}" droppable-element data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
     </section>
