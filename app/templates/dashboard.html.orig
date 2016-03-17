@@ -1,6 +1,7 @@
 <div id="box-columns" class="cards-container">
     <div data-card-type="{{status}}" draggable-element  droppable-element data-drop-area="column" data-drop-target="card" class="column" ng-repeat="(status, data) in dashboard.columns">
-        <header data-drop-target="column">{{data[0]}} <div cards-remove clickgroupremove="removeColumn(status)">+</div></header>
+        <header data-drop-target="column">{{data[0]}}
+            <div cards-remove class="remove-group" clickgroupremove="removeColumn(status)">+</div></header>
         <div ng-style="{'background-color' : data[2][0]}" droppable-element data-task-status="{{status}}">
             <div draggable-element id="task{{issue[0]}}" data-task-status="{{status}}" data-drop-target="card" class="card" ng-repeat="issue in data[1]">{{issue[1]}}
                 <div class="remove" onclick="hideCard(this)"></div>
@@ -10,7 +11,13 @@
 </div>
 <h4>Categories</h4>
 <div draggable-element droppable-element id="panel-container-{{$index}}" class="box-panel-container {{status}}" data-drop-area="category-container" ng-repeat="(status, data) in dashboard.panels">
+<<<<<<< HEAD
+    <header>{{data[0]}}
+        <!--<input type="text" ng-model="data[0]">-->
+        <div cards-remove class="remove-group" clickpanelremove="removePanel(status)">+</div></header>
+=======
     <header>{{data[0]}} <div cards-remove clickpanelremove="removePanel(status)">+</div></header>
+>>>>>>> pre_stable
     <section id="box-rows-{{$index}}" droppable-element data-drop-area="panel" data-drop-target="card-panel" class="cards-container bg-darkmarine box-panel">
     </section>
 </div>

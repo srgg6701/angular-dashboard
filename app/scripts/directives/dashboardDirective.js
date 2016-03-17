@@ -29,21 +29,13 @@ app.directive('dashboardTemplate', function(){
         return {
             scope: {
                 clickgroupremove: '&',
-                clickpanelremove: '&'/*,
-                clickcardremove: '&',
-                dropcardrelocate: '&'*/
+                clickpanelremove: '&'
             },
             link: function(scope, element) {
-                [/*'card', */'group', 'panel'].forEach(function(target){
+                ['group', 'panel'].forEach(function(target){
                     if(element[0].getAttribute('click'+target+'remove'))
                         addListener.call(element[0],target, scope);
-                });/*
-                element[0].addEventListener('drop', function(e) {
-                    //alert('listening drop!');
-                    if (e.stopPropagation) e.stopPropagation();
-                    scope.$apply('dropcardrelocate()');
-                    return false;
-                },  false );*/
+                });
             }
         }
     });
