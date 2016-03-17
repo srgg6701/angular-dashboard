@@ -16,5 +16,5 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider){
             url: "/404",
             templateUrl: "app/templates/404.html"
         });
-    $locationProvider.html5Mode(true)
+    //$locationProvider.html5Mode(true)
 });
