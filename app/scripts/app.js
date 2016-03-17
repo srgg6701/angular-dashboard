@@ -1,11 +1,11 @@
 var app = angular.module('App', ['ui.router']);
 
-app.config(function($stateProvider, $urlRouterProvider, $locationProvider){
-    $urlRouterProvider.otherwise("/404");
+app.config(function($stateProvider, $urlRouterProvider){
+    $urlRouterProvider.otherwise("/home");
 
     $stateProvider
         .state('home',{
-            url: "/",
+            url: "/home",
             templateUrl: "app/templates/home.html"
         })
         .state("test",{
@@ -16,5 +16,4 @@ app.config(function($stateProvider, $urlRouterProvider, $locationProvider){
             url: "/404",
             templateUrl: "app/templates/404.html"
         });
-    //$locationProvider.html5Mode(true)
 });
