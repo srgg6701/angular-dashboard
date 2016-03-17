@@ -175,13 +175,7 @@ function drop(e) {
         return false;
     } else {
         // перемещали карточки на нижнюю панель и между панелями
-        if (thisDropArea && thisDropArea == 'panel' ||
-            ( drawnElementDropTarget &&
-                drawnElementDropTarget == 'card' &&
-                dropTargetStart &&
-                dropTargetStart == 'card-panel'
-            )
-        ) {
+        if (thisDropArea && thisDropArea == 'panel') {
             dropCardBottomPanelCopy.call(this, e, drawnElement);
             return false;
         }
